@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Service Unavailable - NeuroHub{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 text-center">
+        <h1 class="display-1 text-muted">503</h1>
+        <h2>Service Temporarily Unavailable</h2>
+        <p class="lead">The NeuroHub database is temporarily unavailable.</p>
+        <p>This might be due to maintenance or high load. Please try again in a few moments.</p>
+        <a href="/" class="btn btn-primary mt-3">
+            <i class="fas fa-refresh"></i> Try Again
+        </a>
+    </div>
+</div>
+{% endblock %}

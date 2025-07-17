@@ -1,0 +1,463 @@
+{% extends "base.html" %}
+
+{% block title %}Devices - NeuroHub{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1>Device Management</h1>
+        <p class="lead">Configure and monitor neurotechnology devices</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDeviceModal">
+            <i class="fas fa-plus"></i> Add Device
+        </button>
+    </div>
+</div>
+
+<!-- Device Status Overview -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-microchip fa-2x mb-2 text-success"></i>
+                <h5 class="card-title">Active Devices</h5>
+                <h2 class="text-success">{{ active_devices|default(5) }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-pause-circle fa-2x mb-2 text-warning"></i>
+                <h5 class="card-title">Idle Devices</h5>
+                <h2 class="text-warning">{{ idle_devices|default(2) }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-exclamation-triangle fa-2x mb-2 text-danger"></i>
+                <h5 class="card-title">Need Attention</h5>
+                <h2 class="text-danger">{{ attention_devices|default(1) }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-battery-three-quarters fa-2x mb-2 text-info"></i>
+                <h5 class="card-title">Avg Battery</h5>
+                <h2 class="text-info">{{ avg_battery|default('78%') }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Devices List -->
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Registered Devices</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Device</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Last Active</th>
+                        <th>Battery</th>
+                        <th>Signal Quality</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for device in devices|default([]) %}
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-{{ device.icon }} fa-lg me-2 text-primary"></i>
+                                <div>
+                                    <strong>{{ device.name }}</strong><br>
+                                    <small class="text-muted">{{ device.serial }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ device.type }}</td>
+                        <td>
+                            <span class="badge bg-{{ device.status_color }}">
+                                {{ device.status }}
+                            </span>
+                        </td>
+                        <td>{{ device.last_active }}</td>
+                        <td>
+                            <div class="progress" style="width: 60px; height: 20px;">
+                                <div class="progress-bar bg-{{ device.battery_color }}" 
+                                     style="width: {{ device.battery }}%">
+                                    {{ device.battery }}%
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-{{ device.quality_color }}">
+                                {{ device.signal_quality }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-primary" title="Configure">
+                                    <i class="fas fa-cog"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary" title="View Details">
+                                    <i class="fas fa-info-circle"></i>
+                                </button>
+                                <button class="btn btn-outline-danger" title="Disconnect">
+                                    <i class="fas fa-unlink"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <!-- Sample devices for demo -->
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-brain fa-lg me-2 text-primary"></i>
+                                <div>
+                                    <strong>OpenBCI Cyton</strong><br>
+                                    <small class="text-muted">SN: OCB-2025-001</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>8-channel EEG</td>
+                        <td>
+                            <span class="badge bg-success">Active</span>
+                        </td>
+                        <td>Currently in use</td>
+                        <td>
+                            <div class="progress" style="width: 60px; height: 20px;">
+                                <div class="progress-bar bg-success" style="width: 85%">85%</div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-success">Excellent</span>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-primary" title="Configure">
+                                    <i class="fas fa-cog"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary" title="View Details">
+                                    <i class="fas fa-info-circle"></i>
+                                </button>
+                                <button class="btn btn-outline-danger" title="Disconnect">
+                                    <i class="fas fa-unlink"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-headphones fa-lg me-2 text-primary"></i>
+                                <div>
+                                    <strong>Muse 2</strong><br>
+                                    <small class="text-muted">SN: MU2-2025-042</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>4-channel EEG</td>
+                        <td>
+                            <span class="badge bg-success">Active</span>
+                        </td>
+                        <td>2 hours ago</td>
+                        <td>
+                            <div class="progress" style="width: 60px; height: 20px;">
+                                <div class="progress-bar bg-warning" style="width: 65%">65%</div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-success">Good</span>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-primary" title="Configure">
+                                    <i class="fas fa-cog"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary" title="View Details">
+                                    <i class="fas fa-info-circle"></i>
+                                </button>
+                                <button class="btn btn-outline-danger" title="Disconnect">
+                                    <i class="fas fa-unlink"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-wave-square fa-lg me-2 text-primary"></i>
+                                <div>
+                                    <strong>Emotiv EPOC X</strong><br>
+                                    <small class="text-muted">SN: EPX-2025-018</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>14-channel EEG</td>
+                        <td>
+                            <span class="badge bg-warning">Idle</span>
+                        </td>
+                        <td>Yesterday</td>
+                        <td>
+                            <div class="progress" style="width: 60px; height: 20px;">
+                                <div class="progress-bar bg-success" style="width: 100%">100%</div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary">N/A</span>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-primary" title="Configure">
+                                    <i class="fas fa-cog"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary" title="View Details">
+                                    <i class="fas fa-info-circle"></i>
+                                </button>
+                                <button class="btn btn-outline-success" title="Connect">
+                                    <i class="fas fa-link"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-microchip fa-lg me-2 text-primary"></i>
+                                <div>
+                                    <strong>Custom Arduino BCI</strong><br>
+                                    <small class="text-muted">SN: ARD-2025-003</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>16-channel Custom</td>
+                        <td>
+                            <span class="badge bg-danger">Needs Calibration</span>
+                        </td>
+                        <td>3 days ago</td>
+                        <td>
+                            <div class="progress" style="width: 60px; height: 20px;">
+                                <div class="progress-bar bg-secondary" style="width: 0%">N/A</div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-warning">Fair</span>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-warning" title="Calibrate">
+                                    <i class="fas fa-adjust"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary" title="View Details">
+                                    <i class="fas fa-info-circle"></i>
+                                </button>
+                                <button class="btn btn-outline-success" title="Connect">
+                                    <i class="fas fa-link"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-hand-paper fa-lg me-2 text-primary"></i>
+                                <div>
+                                    <strong>MyoWare 2.0</strong><br>
+                                    <small class="text-muted">SN: MW2-2025-007</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>4-channel EMG</td>
+                        <td>
+                            <span class="badge bg-success">Active</span>
+                        </td>
+                        <td>30 minutes ago</td>
+                        <td>
+                            <div class="progress" style="width: 60px; height: 20px;">
+                                <div class="progress-bar bg-warning" style="width: 45%">45%</div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-success">Excellent</span>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-primary" title="Configure">
+                                    <i class="fas fa-cog"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary" title="View Details">
+                                    <i class="fas fa-info-circle"></i>
+                                </button>
+                                <button class="btn btn-outline-danger" title="Disconnect">
+                                    <i class="fas fa-unlink"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Add Device Modal -->
+<div class="modal fade" id="addDeviceModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Device</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Device Type</label>
+                        <select class="form-select" id="deviceType">
+                            <option value="">Select device type...</option>
+                            <option value="openbci">OpenBCI (Cyton/Ganglion)</option>
+                            <option value="muse">Muse (1/2/S)</option>
+                            <option value="emotiv">Emotiv (EPOC/Insight)</option>
+                            <option value="neurosky">NeuroSky MindWave</option>
+                            <option value="custom">Custom/Arduino</option>
+                        </select>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Device Name</label>
+                                <input type="text" class="form-control" placeholder="e.g., Lab OpenBCI #1">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Serial Number</label>
+                                <input type="text" class="form-control" placeholder="e.g., OCB-2025-001">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Connection Type</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="connection" id="bluetooth" checked>
+                            <label class="form-check-label" for="bluetooth">
+                                <i class="fas fa-bluetooth"></i> Bluetooth
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="connection" id="wifi">
+                            <label class="form-check-label" for="wifi">
+                                <i class="fas fa-wifi"></i> WiFi
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="connection" id="usb">
+                            <label class="form-check-label" for="usb">
+                                <i class="fas fa-usb"></i> USB
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Channel Configuration</label>
+                        <input type="text" class="form-control" placeholder="e.g., C3, C4, Cz, FC3, FC4, CP3, CP4, Pz">
+                        <small class="text-muted">Enter channel names separated by commas</small>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Sampling Rate (Hz)</label>
+                                <input type="number" class="form-control" value="250">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Resolution (bits)</label>
+                                <input type="number" class="form-control" value="24">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Scan & Connect
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Device type selection handler
+document.getElementById('deviceType').addEventListener('change', function() {
+    const deviceType = this.value;
+    const nameInput = document.querySelector('input[placeholder*="Device Name"]');
+    const samplingInput = document.querySelector('input[value="250"]');
+    const resolutionInput = document.querySelector('input[value="24"]');
+    
+    // Set defaults based on device type
+    switch(deviceType) {
+        case 'openbci':
+            samplingInput.value = 250;
+            resolutionInput.value = 24;
+            break;
+        case 'muse':
+            samplingInput.value = 256;
+            resolutionInput.value = 12;
+            break;
+        case 'emotiv':
+            samplingInput.value = 128;
+            resolutionInput.value = 16;
+            break;
+        case 'neurosky':
+            samplingInput.value = 512;
+            resolutionInput.value = 12;
+            break;
+    }
+});
+
+// Simulate device status updates
+setInterval(() => {
+    const batteryElements = document.querySelectorAll('.progress-bar');
+    batteryElements.forEach(el => {
+        const currentValue = parseInt(el.style.width);
+        if (currentValue > 0 && Math.random() > 0.8) {
+            const newValue = Math.max(0, currentValue - 1);
+            el.style.width = newValue + '%';
+            el.textContent = newValue + '%';
+            
+            // Update color based on battery level
+            el.classList.remove('bg-success', 'bg-warning', 'bg-danger');
+            if (newValue > 50) {
+                el.classList.add('bg-success');
+            } else if (newValue > 20) {
+                el.classList.add('bg-warning');
+            } else {
+                el.classList.add('bg-danger');
+            }
+        }
+    });
+}, 5000);
+</script>
+{% endblock %}

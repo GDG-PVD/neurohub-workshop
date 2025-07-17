@@ -476,30 +476,42 @@ def add_full_event_with_details_db(event_id, event_name, description, event_date
 # --- Routes ---
 @app.route('/')
 def home():
-    """Home page: Shows all posts and the events panel."""
-    all_posts = []
-    all_events_attendance = [] # Initialize
+    """Home page: Dashboard showing experiment statistics and recent activity."""
+    # For now, return the template with default values
+    # In production, these would come from database queries
+    return render_template('index.html')
 
-    if not db:
-        flash("Database connection not available. Cannot load page data.", "danger")
-    else:
-        try:
-            # Fetch both posts and events
-            all_posts = get_all_posts_with_author_db()
-            all_events_attendance = get_all_events_with_attendees_db() # Fetch events
-        except Exception as e:
-             flash(f"Failed to load page data: {e}", "danger")
-             # Ensure variables are defined even on error
-             all_posts = []
-             all_events_attendance = []
+@app.route('/experiments')
+def experiments():
+    """List all experiments."""
+    return render_template('experiments.html')
 
-    return render_template(
-        'index.html',
-        posts=all_posts,
-        all_events_attendance=all_events_attendance, # Pass events to template
-        google_maps_api_key=GOOGLE_MAPS_API_KEY, # For potential future use on home page
-        google_maps_map_id=GOOGLE_MAPS_MAP_KEY # Pass it to the template
-    )
+@app.route('/experiment/<int:experiment_id>')
+def experiment_detail(experiment_id):
+    """Show detailed view of a specific experiment."""
+    # In production, fetch experiment data from database
+    return render_template('experiment.html', experiment_id=experiment_id)
+
+@app.route('/researchers')
+def researchers():
+    """List all researchers."""
+    return render_template('researchers.html')
+
+@app.route('/researcher/<int:researcher_id>')
+def researcher_profile(researcher_id):
+    """Show researcher profile."""
+    # In production, fetch researcher data from database
+    return render_template('researcher.html', researcher_id=researcher_id)
+
+@app.route('/signals')
+def signals():
+    """Signal analysis dashboard."""
+    return render_template('signals.html')
+
+@app.route('/devices')
+def devices():
+    """Device management page."""
+    return render_template('devices.html')
 
 
 @app.route('/person/<string:person_id>')
