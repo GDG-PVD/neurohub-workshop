@@ -1,0 +1,417 @@
+{% extends "base.html" %}
+
+{% block title %}Researchers - NeuroHub{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1>Researchers</h1>
+        <p class="lead">Connect with neurotechnology researchers and explore their work</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#inviteResearcherModal">
+            <i class="fas fa-user-plus"></i> Invite Researcher
+        </button>
+    </div>
+</div>
+
+<!-- Search and Filter -->
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input type="text" class="form-control" placeholder="Search by name, expertise, or institution...">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select">
+                    <option>All Expertise</option>
+                    <option>EEG/BCI</option>
+                    <option>Signal Processing</option>
+                    <option>Machine Learning</option>
+                    <option>Neuroscience</option>
+                    <option>Hardware Design</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select">
+                    <option>All Institutions</option>
+                    <option>Brown University</option>
+                    <option>Ben-Gurion University</option>
+                    <option>RISD</option>
+                    <option>Other</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Researchers Grid -->
+<div class="row">
+    {% for researcher in researchers|default([]) %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-3">
+                    <div class="researcher-avatar me-3" style="width: 60px; height: 60px; font-size: 1.5rem;">
+                        {{ researcher.name|first }}
+                    </div>
+                    <div class="flex-grow-1">
+                        <h5 class="card-title mb-1">{{ researcher.name }}</h5>
+                        <p class="text-muted mb-0">{{ researcher.title }}</p>
+                        <small class="text-muted">{{ researcher.institution }}</small>
+                    </div>
+                </div>
+                <p class="card-text">{{ researcher.bio }}</p>
+                <div class="mb-3">
+                    <h6 class="text-muted small">EXPERTISE</h6>
+                    <div class="d-flex flex-wrap gap-1">
+                        {% for skill in researcher.expertise %}
+                        <span class="badge bg-secondary">{{ skill }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="row text-center mb-3">
+                    <div class="col-4">
+                        <div class="text-muted small">Projects</div>
+                        <div class="fw-bold">{{ researcher.projects }}</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Publications</div>
+                        <div class="fw-bold">{{ researcher.publications }}</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Collaborators</div>
+                        <div class="fw-bold">{{ researcher.collaborators }}</div>
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="/researcher/{{ researcher.id }}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-user"></i> View Profile
+                    </a>
+                    <button class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-envelope"></i> Contact
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <!-- Sample researchers for demo -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-3">
+                    <div class="researcher-avatar me-3" style="width: 60px; height: 60px; font-size: 1.5rem;">S</div>
+                    <div class="flex-grow-1">
+                        <h5 class="card-title mb-1">Dr. Sarah Chen</h5>
+                        <p class="text-muted mb-0">Associate Professor</p>
+                        <small class="text-muted">Brown University</small>
+                    </div>
+                </div>
+                <p class="card-text">Leading researcher in brain-computer interfaces with focus on motor imagery classification and real-time signal processing.</p>
+                <div class="mb-3">
+                    <h6 class="text-muted small">EXPERTISE</h6>
+                    <div class="d-flex flex-wrap gap-1">
+                        <span class="badge bg-secondary">BCI</span>
+                        <span class="badge bg-secondary">EEG</span>
+                        <span class="badge bg-secondary">Signal Processing</span>
+                        <span class="badge bg-secondary">Machine Learning</span>
+                    </div>
+                </div>
+                <div class="row text-center mb-3">
+                    <div class="col-4">
+                        <div class="text-muted small">Projects</div>
+                        <div class="fw-bold">8</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Publications</div>
+                        <div class="fw-bold">42</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Collaborators</div>
+                        <div class="fw-bold">15</div>
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="/researcher/1" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-user"></i> View Profile
+                    </a>
+                    <button class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-envelope"></i> Contact
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-3">
+                    <div class="researcher-avatar me-3" style="width: 60px; height: 60px; font-size: 1.5rem;">M</div>
+                    <div class="flex-grow-1">
+                        <h5 class="card-title mb-1">Dr. Michael Torres</h5>
+                        <p class="text-muted mb-0">Assistant Professor</p>
+                        <small class="text-muted">Ben-Gurion University</small>
+                    </div>
+                </div>
+                <p class="card-text">Specializing in computational neuroscience and multi-modal biosignal analysis for cognitive state detection.</p>
+                <div class="mb-3">
+                    <h6 class="text-muted small">EXPERTISE</h6>
+                    <div class="d-flex flex-wrap gap-1">
+                        <span class="badge bg-secondary">Neuroscience</span>
+                        <span class="badge bg-secondary">Multi-modal Analysis</span>
+                        <span class="badge bg-secondary">Deep Learning</span>
+                    </div>
+                </div>
+                <div class="row text-center mb-3">
+                    <div class="col-4">
+                        <div class="text-muted small">Projects</div>
+                        <div class="fw-bold">6</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Publications</div>
+                        <div class="fw-bold">28</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Collaborators</div>
+                        <div class="fw-bold">12</div>
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="/researcher/2" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-user"></i> View Profile
+                    </a>
+                    <button class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-envelope"></i> Contact
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-3">
+                    <div class="researcher-avatar me-3" style="width: 60px; height: 60px; font-size: 1.5rem;">E</div>
+                    <div class="flex-grow-1">
+                        <h5 class="card-title mb-1">Dr. Emily Johnson</h5>
+                        <p class="text-muted mb-0">Research Scientist</p>
+                        <small class="text-muted">Brown University</small>
+                    </div>
+                </div>
+                <p class="card-text">Expert in neurofeedback systems and adaptive algorithms for cognitive enhancement and therapeutic applications.</p>
+                <div class="mb-3">
+                    <h6 class="text-muted small">EXPERTISE</h6>
+                    <div class="d-flex flex-wrap gap-1">
+                        <span class="badge bg-secondary">Neurofeedback</span>
+                        <span class="badge bg-secondary">Clinical Applications</span>
+                        <span class="badge bg-secondary">Adaptive Systems</span>
+                    </div>
+                </div>
+                <div class="row text-center mb-3">
+                    <div class="col-4">
+                        <div class="text-muted small">Projects</div>
+                        <div class="fw-bold">5</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Publications</div>
+                        <div class="fw-bold">31</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Collaborators</div>
+                        <div class="fw-bold">18</div>
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="/researcher/3" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-user"></i> View Profile
+                    </a>
+                    <button class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-envelope"></i> Contact
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-3">
+                    <div class="researcher-avatar me-3" style="width: 60px; height: 60px; font-size: 1.5rem;">J</div>
+                    <div class="flex-grow-1">
+                        <h5 class="card-title mb-1">Jake Martinez</h5>
+                        <p class="text-muted mb-0">PhD Candidate</p>
+                        <small class="text-muted">Brown University</small>
+                    </div>
+                </div>
+                <p class="card-text">Developing real-time processing algorithms for EMG-based gesture recognition and prosthetic control systems.</p>
+                <div class="mb-3">
+                    <h6 class="text-muted small">EXPERTISE</h6>
+                    <div class="d-flex flex-wrap gap-1">
+                        <span class="badge bg-secondary">EMG</span>
+                        <span class="badge bg-secondary">Real-time Systems</span>
+                        <span class="badge bg-secondary">Embedded Systems</span>
+                    </div>
+                </div>
+                <div class="row text-center mb-3">
+                    <div class="col-4">
+                        <div class="text-muted small">Projects</div>
+                        <div class="fw-bold">3</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Publications</div>
+                        <div class="fw-bold">8</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Collaborators</div>
+                        <div class="fw-bold">6</div>
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="/researcher/4" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-user"></i> View Profile
+                    </a>
+                    <button class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-envelope"></i> Contact
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-3">
+                    <div class="researcher-avatar me-3" style="width: 60px; height: 60px; font-size: 1.5rem;">D</div>
+                    <div class="flex-grow-1">
+                        <h5 class="card-title mb-1">Dr. David Lee</h5>
+                        <p class="text-muted mb-0">Professor</p>
+                        <small class="text-muted">Ben-Gurion University</small>
+                    </div>
+                </div>
+                <p class="card-text">Pioneer in sleep research using multi-channel EEG and developing algorithms for automatic sleep stage classification.</p>
+                <div class="mb-3">
+                    <h6 class="text-muted small">EXPERTISE</h6>
+                    <div class="d-flex flex-wrap gap-1">
+                        <span class="badge bg-secondary">Sleep Research</span>
+                        <span class="badge bg-secondary">EEG Analysis</span>
+                        <span class="badge bg-secondary">Clinical Studies</span>
+                    </div>
+                </div>
+                <div class="row text-center mb-3">
+                    <div class="col-4">
+                        <div class="text-muted small">Projects</div>
+                        <div class="fw-bold">12</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Publications</div>
+                        <div class="fw-bold">67</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Collaborators</div>
+                        <div class="fw-bold">25</div>
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="/researcher/5" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-user"></i> View Profile
+                    </a>
+                    <button class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-envelope"></i> Contact
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-3">
+                    <div class="researcher-avatar me-3" style="width: 60px; height: 60px; font-size: 1.5rem;">L</div>
+                    <div class="flex-grow-1">
+                        <h5 class="card-title mb-1">Dr. Lisa Wang</h5>
+                        <p class="text-muted mb-0">Postdoctoral Fellow</p>
+                        <small class="text-muted">Brown University</small>
+                    </div>
+                </div>
+                <p class="card-text">Investigating cognitive workload assessment using hybrid brain-computer interfaces and eye-tracking technology.</p>
+                <div class="mb-3">
+                    <h6 class="text-muted small">EXPERTISE</h6>
+                    <div class="d-flex flex-wrap gap-1">
+                        <span class="badge bg-secondary">Cognitive Load</span>
+                        <span class="badge bg-secondary">Eye Tracking</span>
+                        <span class="badge bg-secondary">HCI</span>
+                        <span class="badge bg-secondary">UX Research</span>
+                    </div>
+                </div>
+                <div class="row text-center mb-3">
+                    <div class="col-4">
+                        <div class="text-muted small">Projects</div>
+                        <div class="fw-bold">4</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Publications</div>
+                        <div class="fw-bold">15</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Collaborators</div>
+                        <div class="fw-bold">9</div>
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="/researcher/6" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-user"></i> View Profile
+                    </a>
+                    <button class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-envelope"></i> Contact
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Invite Researcher Modal -->
+<div class="modal fade" id="inviteResearcherModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Invite Researcher to NeuroHub</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" placeholder="researcher@university.edu">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Personal Message (Optional)</label>
+                        <textarea class="form-control" rows="3" placeholder="Add a personal note to your invitation..."></textarea>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="sendCopy">
+                        <label class="form-check-label" for="sendCopy">
+                            Send me a copy of this invitation
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Send Invitation</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

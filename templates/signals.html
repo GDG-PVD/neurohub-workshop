@@ -1,0 +1,474 @@
+{% extends "base.html" %}
+
+{% block title %}Signal Analysis - NeuroHub{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                <li class="breadcrumb-item active">Signal Analysis</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1>Signal Analysis Dashboard</h1>
+        <p class="lead">Real-time biosignal visualization and analysis tools</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadSignalModal">
+            <i class="fas fa-upload"></i> Upload Signal
+        </button>
+        <button class="btn btn-outline-secondary ms-2">
+            <i class="fas fa-download"></i> Export Results
+        </button>
+    </div>
+</div>
+
+<!-- Signal Controls -->
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row align-items-end">
+            <div class="col-md-3">
+                <label class="form-label">Select Experiment</label>
+                <select class="form-select" id="experimentSelect">
+                    <option>Motor Imagery BCI Study</option>
+                    <option>Attention State Classification</option>
+                    <option>Sleep Stage Detection</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Session</label>
+                <select class="form-select" id="sessionSelect">
+                    <option>S-2025-0145</option>
+                    <option>S-2025-0144</option>
+                    <option>S-2025-0143</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Time Window</label>
+                <select class="form-select" id="timeWindow">
+                    <option value="10">10 seconds</option>
+                    <option value="30">30 seconds</option>
+                    <option value="60">1 minute</option>
+                    <option value="300">5 minutes</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Filter</label>
+                <select class="form-select" id="filterSelect">
+                    <option>None</option>
+                    <option>0.5-30 Hz</option>
+                    <option>1-50 Hz</option>
+                    <option>8-13 Hz (Alpha)</option>
+                    <option>13-30 Hz (Beta)</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <div class="btn-group w-100" role="group">
+                    <button class="btn btn-success" id="playBtn">
+                        <i class="fas fa-play"></i> Play
+                    </button>
+                    <button class="btn btn-warning" id="pauseBtn" style="display: none;">
+                        <i class="fas fa-pause"></i> Pause
+                    </button>
+                    <button class="btn btn-danger" id="stopBtn">
+                        <i class="fas fa-stop"></i> Stop
+                    </button>
+                    <button class="btn btn-secondary" id="recordBtn">
+                        <i class="fas fa-circle"></i> Record
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Signal Visualization -->
+<div class="row">
+    <div class="col-md-9">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Multi-Channel Signal View</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="multiChannelChart" height="400"></canvas>
+            </div>
+        </div>
+        
+        <!-- Frequency Analysis -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Power Spectral Density</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="psdChart" height="250"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Time-Frequency Analysis</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="spectrogramChart" height="250"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Side Panel -->
+    <div class="col-md-3">
+        <!-- Signal Quality -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <h6 class="mb-0">Signal Quality</h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <small>Overall Quality</small>
+                        <small class="fw-bold text-success">94%</small>
+                    </div>
+                    <div class="progress" style="height: 10px;">
+                        <div class="progress-bar bg-success" style="width: 94%"></div>
+                    </div>
+                </div>
+                
+                <h6 class="mt-3 mb-2">Channel Status</h6>
+                <div class="small">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span><i class="fas fa-circle text-success"></i> C3</span>
+                        <span>Good (98%)</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span><i class="fas fa-circle text-success"></i> C4</span>
+                        <span>Good (96%)</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span><i class="fas fa-circle text-success"></i> Cz</span>
+                        <span>Good (95%)</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span><i class="fas fa-circle text-warning"></i> FC3</span>
+                        <span>Fair (85%)</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span><i class="fas fa-circle text-success"></i> FC4</span>
+                        <span>Good (92%)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Analysis Tools -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <h6 class="mb-0">Quick Analysis</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-brain"></i> Run Classification
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-chart-line"></i> Feature Extraction
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-magic"></i> Artifact Removal
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-compress"></i> Event Detection
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Markers -->
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">Event Markers</h6>
+            </div>
+            <div class="card-body">
+                <div class="small">
+                    <div class="mb-2">
+                        <span class="badge bg-primary me-1">T=0:15</span>
+                        <span>Trial Start</span>
+                    </div>
+                    <div class="mb-2">
+                        <span class="badge bg-warning me-1">T=0:18</span>
+                        <span>Cue: Left Hand</span>
+                    </div>
+                    <div class="mb-2">
+                        <span class="badge bg-success me-1">T=0:23</span>
+                        <span>Movement Onset</span>
+                    </div>
+                    <div class="mb-2">
+                        <span class="badge bg-info me-1">T=0:28</span>
+                        <span>Trial End</span>
+                    </div>
+                </div>
+                <button class="btn btn-sm btn-outline-secondary w-100 mt-2">
+                    <i class="fas fa-plus"></i> Add Marker
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Upload Signal Modal -->
+<div class="modal fade" id="uploadSignalModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Upload Signal Data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Data File</label>
+                        <input type="file" class="form-control" accept=".csv,.edf,.mat,.txt">
+                        <small class="text-muted">Supported formats: CSV, EDF, MAT, TXT</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Sampling Rate (Hz)</label>
+                        <input type="number" class="form-control" value="250">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Channel Configuration</label>
+                        <select class="form-select">
+                            <option>Auto-detect</option>
+                            <option>10-20 System (8 channels)</option>
+                            <option>10-20 System (16 channels)</option>
+                            <option>10-20 System (32 channels)</option>
+                            <option>Custom</option>
+                        </select>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="preprocessCheck">
+                        <label class="form-check-label" for="preprocessCheck">
+                            Apply basic preprocessing (bandpass filter, notch filter)
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Upload</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Multi-channel signal chart
+const channels = ['C3', 'C4', 'Cz', 'FC3', 'FC4', 'CP3', 'CP4', 'Pz'];
+const colors = [
+    'rgb(255, 99, 132)',
+    'rgb(54, 162, 235)',
+    'rgb(75, 192, 192)',
+    'rgb(255, 206, 86)',
+    'rgb(153, 102, 255)',
+    'rgb(255, 159, 64)',
+    'rgb(201, 203, 207)',
+    'rgb(100, 181, 246)'
+];
+
+// Generate initial data
+const generateSignalData = (numPoints) => {
+    return Array.from({length: numPoints}, () => Math.random() * 100 - 50);
+};
+
+// Multi-channel visualization
+const multiCtx = document.getElementById('multiChannelChart').getContext('2d');
+const multiChannelChart = new Chart(multiCtx, {
+    type: 'line',
+    data: {
+        labels: Array.from({length: 250}, (_, i) => i / 250),
+        datasets: channels.map((channel, idx) => ({
+            label: channel,
+            data: generateSignalData(250),
+            borderColor: colors[idx],
+            borderWidth: 1,
+            pointRadius: 0,
+            tension: 0,
+            yAxisID: `y${idx}`
+        }))
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        interaction: {
+            mode: 'index',
+            intersect: false
+        },
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Time (seconds)'
+                }
+            },
+            ...Object.fromEntries(
+                channels.map((_, idx) => [
+                    `y${idx}`,
+                    {
+                        type: 'linear',
+                        display: idx === 0,
+                        position: 'left',
+                        grid: {
+                            drawOnChartArea: idx === 0
+                        },
+                        title: {
+                            display: idx === 0,
+                            text: 'Amplitude (μV)'
+                        }
+                    }
+                ])
+            )
+        },
+        plugins: {
+            legend: {
+                position: 'right'
+            }
+        }
+    }
+});
+
+// Power Spectral Density
+const psdCtx = document.getElementById('psdChart').getContext('2d');
+const psdChart = new Chart(psdCtx, {
+    type: 'line',
+    data: {
+        labels: Array.from({length: 50}, (_, i) => i),
+        datasets: [{
+            label: 'PSD',
+            data: Array.from({length: 50}, (_, i) => Math.exp(-i/10) * (1 + Math.random() * 0.3)),
+            borderColor: 'rgb(46, 134, 171)',
+            backgroundColor: 'rgba(46, 134, 171, 0.1)',
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Frequency (Hz)'
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'Power (μV²/Hz)'
+                },
+                type: 'logarithmic'
+            }
+        },
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+});
+
+// Spectrogram (simplified visualization)
+const spectrogramCtx = document.getElementById('spectrogramChart').getContext('2d');
+const spectrogramChart = new Chart(spectrogramCtx, {
+    type: 'scatter',
+    data: {
+        datasets: [{
+            label: 'Spectrogram',
+            data: Array.from({length: 1000}, () => ({
+                x: Math.random() * 10,
+                y: Math.random() * 50,
+                r: Math.random() * 5
+            })),
+            backgroundColor: 'rgba(162, 59, 114, 0.5)'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Time (s)'
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'Frequency (Hz)'
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+});
+
+// Play/Pause functionality
+let isPlaying = false;
+let animationId;
+
+document.getElementById('playBtn').addEventListener('click', () => {
+    isPlaying = true;
+    document.getElementById('playBtn').style.display = 'none';
+    document.getElementById('pauseBtn').style.display = 'inline-block';
+    startAnimation();
+});
+
+document.getElementById('pauseBtn').addEventListener('click', () => {
+    isPlaying = false;
+    document.getElementById('playBtn').style.display = 'inline-block';
+    document.getElementById('pauseBtn').style.display = 'none';
+    cancelAnimationFrame(animationId);
+});
+
+document.getElementById('stopBtn').addEventListener('click', () => {
+    isPlaying = false;
+    document.getElementById('playBtn').style.display = 'inline-block';
+    document.getElementById('pauseBtn').style.display = 'none';
+    cancelAnimationFrame(animationId);
+    // Reset data
+    multiChannelChart.data.datasets.forEach(dataset => {
+        dataset.data = generateSignalData(250);
+    });
+    multiChannelChart.update('none');
+});
+
+function startAnimation() {
+    if (!isPlaying) return;
+    
+    // Update multi-channel data
+    multiChannelChart.data.datasets.forEach(dataset => {
+        dataset.data.shift();
+        dataset.data.push(Math.random() * 100 - 50);
+    });
+    multiChannelChart.update('none');
+    
+    animationId = requestAnimationFrame(startAnimation);
+}
+</script>
+{% endblock %}

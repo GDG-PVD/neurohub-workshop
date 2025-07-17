@@ -1,0 +1,414 @@
+{% extends "base.html" %}
+
+{% block title %}Experiments - NeuroHub{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1>Experiments</h1>
+        <p class="lead">Browse and manage all neurotechnology research experiments</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newExperimentModal">
+            <i class="fas fa-plus"></i> New Experiment
+        </button>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <label class="form-label">Status</label>
+                <select class="form-select">
+                    <option>All Status</option>
+                    <option>Active</option>
+                    <option>Completed</option>
+                    <option>Planning</option>
+                    <option>On Hold</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Signal Type</label>
+                <select class="form-select">
+                    <option>All Types</option>
+                    <option>EEG</option>
+                    <option>EMG</option>
+                    <option>ECG</option>
+                    <option>Multi-modal</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Researcher</label>
+                <select class="form-select">
+                    <option>All Researchers</option>
+                    <option>Dr. Sarah Chen</option>
+                    <option>Dr. Michael Torres</option>
+                    <option>Dr. Emily Johnson</option>
+                    <option>Dr. David Lee</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Date Range</label>
+                <select class="form-select">
+                    <option>All Time</option>
+                    <option>Last Week</option>
+                    <option>Last Month</option>
+                    <option>Last 3 Months</option>
+                    <option>Last Year</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Experiments Grid -->
+<div class="row">
+    {% for experiment in experiments|default([]) %}
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title">{{ experiment.name }}</h5>
+                    <span class="experiment-status status-{{ experiment.status }}">
+                        {{ experiment.status|capitalize }}
+                    </span>
+                </div>
+                <p class="card-text">{{ experiment.description }}</p>
+                <div class="mb-3">
+                    <small class="text-muted">
+                        <i class="fas fa-user"></i> {{ experiment.lead_researcher.name }} | 
+                        <i class="fas fa-calendar"></i> Started {{ experiment.start_date }}
+                    </small>
+                </div>
+                <div class="row text-center mb-3">
+                    <div class="col-4">
+                        <div class="text-muted small">Participants</div>
+                        <div class="fw-bold">{{ experiment.participants }}</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Sessions</div>
+                        <div class="fw-bold">{{ experiment.sessions }}</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Data</div>
+                        <div class="fw-bold">{{ experiment.data_size }} GB</div>
+                    </div>
+                </div>
+                <a href="/experiment/{{ experiment.id }}" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-eye"></i> View Details
+                </a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <!-- Sample experiments for demo -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title">Motor Imagery BCI Study</h5>
+                    <span class="experiment-status status-active">Active</span>
+                </div>
+                <p class="card-text">Analyzing EEG patterns during motor imagery tasks for brain-computer interface control applications.</p>
+                <div class="mb-3">
+                    <small class="text-muted">
+                        <i class="fas fa-user"></i> Dr. Sarah Chen | 
+                        <i class="fas fa-calendar"></i> Started Jan 15, 2025
+                    </small>
+                </div>
+                <div class="row text-center mb-3">
+                    <div class="col-4">
+                        <div class="text-muted small">Participants</div>
+                        <div class="fw-bold">12</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Sessions</div>
+                        <div class="fw-bold">45</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Data</div>
+                        <div class="fw-bold">2.4 GB</div>
+                    </div>
+                </div>
+                <a href="/experiment/1" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-eye"></i> View Details
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title">Attention State Classification</h5>
+                    <span class="experiment-status status-completed">Completed</span>
+                </div>
+                <p class="card-text">Using multi-modal biosignals to detect and classify different attention states in real-time.</p>
+                <div class="mb-3">
+                    <small class="text-muted">
+                        <i class="fas fa-user"></i> Dr. Michael Torres | 
+                        <i class="fas fa-calendar"></i> Started Dec 1, 2024
+                    </small>
+                </div>
+                <div class="row text-center mb-3">
+                    <div class="col-4">
+                        <div class="text-muted small">Participants</div>
+                        <div class="fw-bold">20</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Sessions</div>
+                        <div class="fw-bold">80</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Data</div>
+                        <div class="fw-bold">5.1 GB</div>
+                    </div>
+                </div>
+                <a href="/experiment/2" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-eye"></i> View Details
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title">Neurofeedback Training Protocol</h5>
+                    <span class="experiment-status status-planning">Planning</span>
+                </div>
+                <p class="card-text">Developing adaptive neurofeedback algorithms for cognitive enhancement and stress reduction.</p>
+                <div class="mb-3">
+                    <small class="text-muted">
+                        <i class="fas fa-user"></i> Dr. Emily Johnson | 
+                        <i class="fas fa-calendar"></i> Planned Feb 1, 2025
+                    </small>
+                </div>
+                <div class="row text-center mb-3">
+                    <div class="col-4">
+                        <div class="text-muted small">Participants</div>
+                        <div class="fw-bold">-</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Sessions</div>
+                        <div class="fw-bold">-</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Data</div>
+                        <div class="fw-bold">-</div>
+                    </div>
+                </div>
+                <a href="/experiment/3" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-eye"></i> View Details
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title">Sleep Stage Detection</h5>
+                    <span class="experiment-status status-active">Active</span>
+                </div>
+                <p class="card-text">Real-time classification of sleep stages using EEG and physiological signals for sleep quality assessment.</p>
+                <div class="mb-3">
+                    <small class="text-muted">
+                        <i class="fas fa-user"></i> Dr. David Lee | 
+                        <i class="fas fa-calendar"></i> Started Jan 10, 2025
+                    </small>
+                </div>
+                <div class="row text-center mb-3">
+                    <div class="col-4">
+                        <div class="text-muted small">Participants</div>
+                        <div class="fw-bold">8</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Sessions</div>
+                        <div class="fw-bold">24</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Data</div>
+                        <div class="fw-bold">8.3 GB</div>
+                    </div>
+                </div>
+                <a href="/experiment/4" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-eye"></i> View Details
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title">EMG-based Gesture Recognition</h5>
+                    <span class="experiment-status status-active">Active</span>
+                </div>
+                <p class="card-text">Developing machine learning models for real-time hand gesture recognition using surface EMG signals.</p>
+                <div class="mb-3">
+                    <small class="text-muted">
+                        <i class="fas fa-user"></i> Jake Martinez | 
+                        <i class="fas fa-calendar"></i> Started Jan 5, 2025
+                    </small>
+                </div>
+                <div class="row text-center mb-3">
+                    <div class="col-4">
+                        <div class="text-muted small">Participants</div>
+                        <div class="fw-bold">15</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Sessions</div>
+                        <div class="fw-bold">60</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Data</div>
+                        <div class="fw-bold">1.8 GB</div>
+                    </div>
+                </div>
+                <a href="/experiment/5" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-eye"></i> View Details
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title">Cognitive Load Assessment</h5>
+                    <span class="experiment-status status-completed">Completed</span>
+                </div>
+                <p class="card-text">Measuring cognitive workload using EEG, eye tracking, and heart rate variability during complex tasks.</p>
+                <div class="mb-3">
+                    <small class="text-muted">
+                        <i class="fas fa-user"></i> Dr. Lisa Wang | 
+                        <i class="fas fa-calendar"></i> Started Nov 15, 2024
+                    </small>
+                </div>
+                <div class="row text-center mb-3">
+                    <div class="col-4">
+                        <div class="text-muted small">Participants</div>
+                        <div class="fw-bold">30</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Sessions</div>
+                        <div class="fw-bold">120</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted small">Data</div>
+                        <div class="fw-bold">6.7 GB</div>
+                    </div>
+                </div>
+                <a href="/experiment/6" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-eye"></i> View Details
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+<nav aria-label="Experiments pagination">
+    <ul class="pagination justify-content-center">
+        <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Previous</a>
+        </li>
+        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+        </li>
+    </ul>
+</nav>
+
+<!-- New Experiment Modal -->
+<div class="modal fade" id="newExperimentModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create New Experiment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Experiment Name</label>
+                        <input type="text" class="form-control" placeholder="e.g., Motor Imagery Classification Study">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" rows="3" placeholder="Describe the experiment objectives..."></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Start Date</label>
+                                <input type="date" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Expected Duration</label>
+                                <input type="text" class="form-control" placeholder="e.g., 2 weeks">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Primary Device</label>
+                                <select class="form-select">
+                                    <option>Select a device...</option>
+                                    <option>OpenBCI Cyton (8-channel)</option>
+                                    <option>Muse 2 Headband</option>
+                                    <option>Emotiv EPOC X</option>
+                                    <option>Custom Arduino Setup</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Signal Type</label>
+                                <select class="form-select">
+                                    <option>Select signal type...</option>
+                                    <option>EEG</option>
+                                    <option>EMG</option>
+                                    <option>ECG</option>
+                                    <option>Multi-modal</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Team Members</label>
+                        <select class="form-select" multiple>
+                            <option>Dr. Sarah Chen</option>
+                            <option>Dr. Michael Torres</option>
+                            <option>Dr. Emily Johnson</option>
+                            <option>Dr. David Lee</option>
+                            <option>Jake Martinez</option>
+                            <option>Dr. Lisa Wang</option>
+                        </select>
+                        <small class="text-muted">Hold Ctrl/Cmd to select multiple researchers</small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Create Experiment</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

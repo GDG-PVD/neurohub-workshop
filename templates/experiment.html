@@ -1,0 +1,599 @@
+{% extends "base.html" %}
+
+{% block title %}{{ experiment.name }} - NeuroHub Experiment{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="/experiments">Experiments</a></li>
+                <li class="breadcrumb-item active">{{ experiment.name|default('Motor Imagery BCI Study') }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1>{{ experiment.name|default('Motor Imagery BCI Study') }}</h1>
+        <p class="lead">{{ experiment.description|default('Analyzing EEG patterns during motor imagery tasks for BCI control') }}</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <span class="experiment-status status-{{ experiment.status|default('active') }} me-2">
+            {{ experiment.status|default('Active')|capitalize }}
+        </span>
+        <div class="btn-group mt-2">
+            <button class="btn btn-primary">
+                <i class="fas fa-play"></i> Start Session
+            </button>
+            <button class="btn btn-outline-secondary">
+                <i class="fas fa-download"></i> Export Data
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Experiment Overview Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="text-muted">Lead Researcher</h6>
+                <div class="d-flex align-items-center mt-2">
+                    <div class="researcher-avatar me-2">{{ experiment.lead_researcher.name|default('S')|first }}</div>
+                    <div>
+                        <strong>{{ experiment.lead_researcher.name|default('Dr. Sarah Chen') }}</strong><br>
+                        <small class="text-muted">{{ experiment.lead_researcher.email|default('schen@brown.edu') }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="text-muted">Duration</h6>
+                <strong>{{ experiment.start_date|default('Jan 15, 2025') }}</strong> - 
+                <strong>{{ experiment.end_date|default('Ongoing') }}</strong>
+                <div class="mt-1">
+                    <small class="text-muted">{{ experiment.duration|default('5 days active') }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="text-muted">Participants</h6>
+                <h3 class="mb-0">{{ experiment.participants|default(12) }}</h3>
+                <small class="text-success">+{{ experiment.new_participants|default(3) }} this week</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="text-muted">Data Collected</h6>
+                <h3 class="mb-0">{{ experiment.data_size|default('2.4') }} GB</h3>
+                <small class="text-muted">{{ experiment.sessions|default(45) }} sessions</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Tabs -->
+<ul class="nav nav-tabs mb-4" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" data-bs-toggle="tab" href="#protocol">
+            <i class="fas fa-clipboard-list"></i> Protocol
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#signals">
+            <i class="fas fa-wave-square"></i> Signal Data
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#analysis">
+            <i class="fas fa-chart-line"></i> Analysis
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#team">
+            <i class="fas fa-users"></i> Team
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#documentation">
+            <i class="fas fa-file-alt"></i> Documentation
+        </a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <!-- Protocol Tab -->
+    <div class="tab-pane fade show active" id="protocol">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Experimental Protocol</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6>Objectives</h6>
+                        <ul>
+                            <li>Identify distinct EEG patterns associated with different motor imagery tasks</li>
+                            <li>Develop classification algorithms for real-time BCI control</li>
+                            <li>Evaluate the effectiveness of different signal processing techniques</li>
+                        </ul>
+                        
+                        <h6 class="mt-4">Procedure</h6>
+                        <ol>
+                            <li><strong>Preparation (10 min)</strong>
+                                <ul>
+                                    <li>Participant briefing and consent</li>
+                                    <li>EEG cap placement and impedance check</li>
+                                    <li>Baseline recording (eyes open/closed)</li>
+                                </ul>
+                            </li>
+                            <li><strong>Training Phase (20 min)</strong>
+                                <ul>
+                                    <li>Motor imagery instructions</li>
+                                    <li>Practice trials with visual feedback</li>
+                                    <li>Calibration of classifier</li>
+                                </ul>
+                            </li>
+                            <li><strong>Testing Phase (30 min)</strong>
+                                <ul>
+                                    <li>Randomized motor imagery tasks</li>
+                                    <li>Real-time classification and feedback</li>
+                                    <li>Performance metrics collection</li>
+                                </ul>
+                            </li>
+                            <li><strong>Post-Session (10 min)</strong>
+                                <ul>
+                                    <li>Subjective questionnaire</li>
+                                    <li>Data quality verification</li>
+                                    <li>Participant debriefing</li>
+                                </ul>
+                            </li>
+                        </ol>
+                        
+                        <h6 class="mt-4">Inclusion Criteria</h6>
+                        <ul>
+                            <li>Age 18-65 years</li>
+                            <li>No history of neurological disorders</li>
+                            <li>Normal or corrected-to-normal vision</li>
+                            <li>Right-handed (for consistency)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="mb-0">Equipment Setup</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6>Primary Device</h6>
+                        <p><strong>OpenBCI Cyton</strong><br>
+                        8-channel EEG, 250 Hz sampling rate</p>
+                        
+                        <h6>Electrode Placement</h6>
+                        <p>10-20 International System<br>
+                        Channels: C3, C4, Cz, FC3, FC4, CP3, CP4, Pz</p>
+                        
+                        <h6>Software</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> OpenBCI GUI v5.0</li>
+                            <li><i class="fas fa-check text-success"></i> Custom Python Pipeline</li>
+                            <li><i class="fas fa-check text-success"></i> Unity VR Environment</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Quick Stats</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Completion Rate</span>
+                            <strong>75%</strong>
+                        </div>
+                        <div class="progress mb-3">
+                            <div class="progress-bar" style="width: 75%"></div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Data Quality</span>
+                            <strong>94%</strong>
+                        </div>
+                        <div class="progress mb-3">
+                            <div class="progress-bar bg-success" style="width: 94%"></div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Classification Accuracy</span>
+                            <strong>82%</strong>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-info" style="width: 82%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Signal Data Tab -->
+    <div class="tab-pane fade" id="signals">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Real-time Signal Visualization</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="signalChart" height="300"></canvas>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Recent Sessions</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Session ID</th>
+                                <th>Participant</th>
+                                <th>Date/Time</th>
+                                <th>Duration</th>
+                                <th>Quality</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>S-2025-0145</code></td>
+                                <td>P012</td>
+                                <td>Jan 20, 2025 14:30</td>
+                                <td>62 min</td>
+                                <td><span class="signal-badge">95%</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-chart-line"></i> Analyze
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>S-2025-0144</code></td>
+                                <td>P011</td>
+                                <td>Jan 20, 2025 10:15</td>
+                                <td>58 min</td>
+                                <td><span class="signal-badge">92%</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-chart-line"></i> Analyze
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>S-2025-0143</code></td>
+                                <td>P010</td>
+                                <td>Jan 19, 2025 16:45</td>
+                                <td>61 min</td>
+                                <td><span class="signal-badge">89%</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-chart-line"></i> Analyze
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Analysis Tab -->
+    <div class="tab-pane fade" id="analysis">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Classification Performance</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="performanceChart" height="250"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Feature Importance</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="featureChart" height="250"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Analysis Reports</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Weekly Performance Report</h6>
+                                <p class="mb-0 text-muted">Generated Jan 20, 2025 by Signal Processing Agent</p>
+                            </div>
+                            <div>
+                                <span class="badge bg-success">Completed</span>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Feature Extraction Analysis</h6>
+                                <p class="mb-0 text-muted">Generated Jan 18, 2025 by Signal Processing Agent</p>
+                            </div>
+                            <div>
+                                <span class="badge bg-success">Completed</span>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Participant Variability Study</h6>
+                                <p class="mb-0 text-muted">Generated Jan 15, 2025 by Documentation Agent</p>
+                            </div>
+                            <div>
+                                <span class="badge bg-warning">In Progress</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Team Tab -->
+    <div class="tab-pane fade" id="team">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Research Team</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            <div class="list-group-item">
+                                <div class="d-flex align-items-center">
+                                    <div class="researcher-avatar me-3">S</div>
+                                    <div>
+                                        <h6 class="mb-0">Dr. Sarah Chen</h6>
+                                        <small class="text-muted">Principal Investigator</small><br>
+                                        <small>Expertise: BCI, Signal Processing</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <div class="d-flex align-items-center">
+                                    <div class="researcher-avatar me-3">M</div>
+                                    <div>
+                                        <h6 class="mb-0">Dr. Michael Torres</h6>
+                                        <small class="text-muted">Co-Investigator</small><br>
+                                        <small>Expertise: Machine Learning, Neuroscience</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <div class="d-flex align-items-center">
+                                    <div class="researcher-avatar me-3">J</div>
+                                    <div>
+                                        <h6 class="mb-0">Jake Martinez</h6>
+                                        <small class="text-muted">Graduate Student</small><br>
+                                        <small>Focus: Real-time Processing</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Collaborations</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            <div class="list-group-item">
+                                <h6 class="mb-1">Brown University BrainGate Lab</h6>
+                                <p class="mb-0 text-muted">Clinical translation of BCI systems</p>
+                            </div>
+                            <div class="list-group-item">
+                                <h6 class="mb-1">BGU Computational Neuroscience Group</h6>
+                                <p class="mb-0 text-muted">Advanced signal processing algorithms</p>
+                            </div>
+                            <div class="list-group-item">
+                                <h6 class="mb-1">RISD Industrial Design</h6>
+                                <p class="mb-0 text-muted">Ergonomic headset design</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Documentation Tab -->
+    <div class="tab-pane fade" id="documentation">
+        <div class="card">
+            <div class="card-body">
+                <h5>Project Documentation</h5>
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <div class="list-group">
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <i class="fas fa-file-pdf text-danger"></i> IRB Protocol
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <i class="fas fa-file-word text-primary"></i> Experiment Design Document
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <i class="fas fa-file-excel text-success"></i> Participant Data Sheet
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <i class="fas fa-file-powerpoint text-warning"></i> Progress Presentation
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6>Latest Notes</h6>
+                                <p><strong>Jan 20, 2025</strong> - Achieved 82% classification accuracy on 4-class motor imagery. The new preprocessing pipeline with adaptive filtering shows significant improvement.</p>
+                                <p><strong>Jan 18, 2025</strong> - Participant P010 showed exceptional performance (>90% accuracy). Consider analyzing their data separately for feature optimization.</p>
+                                <p><strong>Jan 15, 2025</strong> - Started experiment with updated protocol. Initial results promising.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Multi-channel EEG Signal Visualization
+const signalCtx = document.getElementById('signalChart').getContext('2d');
+const signalChart = new Chart(signalCtx, {
+    type: 'line',
+    data: {
+        labels: Array.from({length: 100}, (_, i) => i),
+        datasets: [
+            {
+                label: 'C3',
+                data: Array.from({length: 100}, () => Math.random() * 100 - 50),
+                borderColor: 'rgb(255, 99, 132)',
+                borderWidth: 1,
+                pointRadius: 0
+            },
+            {
+                label: 'C4',
+                data: Array.from({length: 100}, () => Math.random() * 100 - 50),
+                borderColor: 'rgb(54, 162, 235)',
+                borderWidth: 1,
+                pointRadius: 0
+            },
+            {
+                label: 'Cz',
+                data: Array.from({length: 100}, () => Math.random() * 100 - 50),
+                borderColor: 'rgb(75, 192, 192)',
+                borderWidth: 1,
+                pointRadius: 0
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        scales: {
+            x: {
+                display: false
+            },
+            y: {
+                min: -100,
+                max: 100
+            }
+        },
+        plugins: {
+            legend: {
+                position: 'right'
+            }
+        }
+    }
+});
+
+// Performance Chart
+const perfCtx = document.getElementById('performanceChart').getContext('2d');
+const performanceChart = new Chart(perfCtx, {
+    type: 'bar',
+    data: {
+        labels: ['Left Hand', 'Right Hand', 'Feet', 'Tongue'],
+        datasets: [{
+            label: 'Classification Accuracy (%)',
+            data: [85, 88, 78, 82],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.5)',
+                'rgba(54, 162, 235, 0.5)',
+                'rgba(255, 206, 86, 0.5)',
+                'rgba(75, 192, 192, 0.5)'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 100
+            }
+        }
+    }
+});
+
+// Feature Importance Chart
+const featCtx = document.getElementById('featureChart').getContext('2d');
+const featureChart = new Chart(featCtx, {
+    type: 'radar',
+    data: {
+        labels: ['Alpha Power', 'Beta Power', 'Theta Power', 'ERD/ERS', 'Coherence', 'Phase'],
+        datasets: [{
+            label: 'Feature Importance',
+            data: [0.85, 0.72, 0.45, 0.92, 0.68, 0.55],
+            backgroundColor: 'rgba(46, 134, 171, 0.2)',
+            borderColor: 'rgb(46, 134, 171)',
+            pointBackgroundColor: 'rgb(46, 134, 171)'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            r: {
+                beginAtZero: true,
+                max: 1
+            }
+        }
+    }
+});
+
+// Simulate real-time data update
+setInterval(() => {
+    signalChart.data.datasets.forEach(dataset => {
+        dataset.data.shift();
+        dataset.data.push(Math.random() * 100 - 50);
+    });
+    signalChart.update('none');
+}, 100);
+</script>
+{% endblock %}

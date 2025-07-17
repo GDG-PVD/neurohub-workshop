@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-InstaVibe Bootstrap is a multi-agent AI social network platform built on Google Cloud's AI infrastructure. It combines a Flask web application with multiple specialized AI agents that communicate via Google's Agent Development Kit (ADK) and Model Context Protocol (MCP).
+NeuroHub is a multi-agent AI platform for neurotechnology research and development, built on Google Cloud's AI infrastructure. It combines a Flask web application with specialized AI agents that communicate via Google's Agent Development Kit (ADK), Agent-to-Agent (A2A) protocol, and Model Context Protocol (MCP).
+
+This workshop project demonstrates how to build production-ready multi-agent systems for scientific research applications, adapted from Christina Lin's InstaVibe codelab.
 
 ## Common Development Commands
 
@@ -15,23 +17,23 @@ InstaVibe Bootstrap is a multi-agent AI social network platform built on Google 
 pip install -r requirements.txt
 
 # Run the Flask application
-cd instavibe && python app.py
+cd neurohub && python app.py
 
 # Run an agent server
 cd agents/[agent-name] && python a2a_server.py
 
 # Test an agent
-cd agents/[agent-name] && python [agent-name]_test_client.py
+cd agents/documentation && python instavibe_test_client.py
 ```
 
 ### Database Setup
 
 ```bash
 # Set up the database schema and test data
-cd instavibe && python setup.py
+cd neurohub && python setup.py
 
 # Reset the database (drops all tables)
-# Execute the SQL in instavibe/reset.sql via Spanner console
+# Execute the SQL in neurohub/reset.sql via Spanner console
 ```
 
 ### Docker Operations
@@ -41,7 +43,7 @@ cd instavibe && python setup.py
 docker build -t [agent-name] -f agents/[agent-name]/Dockerfile .
 
 # Build the main app container
-docker build -t instavibe -f instavibe/Dockerfile .
+docker build -t neurohub -f neurohub/Dockerfile .
 
 # Deploy via Google Cloud Build
 gcloud builds submit --config agents/cloudbuild.yaml --substitutions=_AGENT_NAME=[agent-name]
@@ -50,32 +52,44 @@ gcloud builds submit --config agents/cloudbuild.yaml --substitutions=_AGENT_NAME
 ### Environment Setup
 
 ```bash
-# Initialize Google Cloud project
+# Initialize Google Cloud project (creates project_id.txt)
 source init.sh
 
-# Set environment variables
-source agents/set_env.sh
+# Set environment variables (must be sourced)
+source set_env.sh
+
+# Environment variables needed:
+# - GOOGLE_CLOUD_PROJECT (from project_id.txt)
+# - SPANNER_INSTANCE_ID (default: neurohub-graph-instance)
+# - SPANNER_DATABASE_ID (default: neurohub-db)
+# - GOOGLE_MAPS_API_KEY (from mapkey.txt)
+# - FLASK_SECRET_KEY (for session management)
 ```
 
 ## High-Level Architecture
 
 ### System Components
 
-1. **Core Application (`/instavibe/`)**
+1. **Core Application (`/neurohub/`)**
    - Flask web server with SSE support for real-time features
    - Google Cloud Spanner database with property graph model
-   - Web UI for viewing people, events, and posts
-   - REST API endpoints for creating posts and events
-   - "Introvert Ally" AI-powered social planning assistant
+   - Web UI for viewing researchers, experiments, and signal data
+   - REST API endpoints for creating experiments and analysis reports
+   - "NeuroHub Ally" AI-powered research assistant
 
 2. **AI Agents (`/agents/`)**
-   - **Planner Agent**: Coordinates multi-agent workflows and task planning
-   - **Social Agent**: Handles social media content generation and analysis
-   - **Platform MCP Client**: Integrates with MCP servers for tool access
-   - **Orchestrate Agent**: Manages agent-to-agent communication
+   - **Signal Processor Agent**: Analyzes biosignal data (EEG, EMG, ECG) and identifies patterns
+   - **Experiment Designer Agent**: Creates research protocols based on scientific literature
+   - **Documentation Agent**: Generates research reports and exports findings
+   - **Research Orchestrator Agent**: Coordinates multi-agent workflows for complex research tasks
 
-3. **Tools (`/tools/instavibe/`)**
-   - MCP server exposing create_event and create_post functions
+3. **Tools (`/tools/neurohub/`)**
+   - MCP server exposing neurotechnology-specific functions:
+     - `create_experiment`: Register new research experiments
+     - `create_analysis_report`: Document signal analysis findings
+     - `create_session_log`: Record experimental session data
+     - `export_findings`: Generate formatted research outputs
+     - `register_device`: Add new measurement devices to the system
    - Accessible by agents via SSE transport protocol
 
 4. **Common Library (`a2a_common`)**
@@ -84,19 +98,28 @@ source agents/set_env.sh
 
 ### Database Schema
 
-The application uses Google Cloud Spanner with a property graph model:
+The application uses Google Cloud Spanner with a property graph model for research relationships:
 
 **Nodes:**
-- `Person`: Users with name, age
-- `Event`: Social events with name, description, date
-- `Post`: Social media posts with text, sentiment
-- `Location`: Places with coordinates and address
+- `Researcher`: Scientists with name, email, institution, expertise
+- `Experiment`: Research studies with protocols, hypotheses, status
+- `Device`: Measurement equipment (EEG headsets, EMG sensors, etc.)
+- `SignalData`: Recorded biosignals with quality metrics
+- `Session`: Individual data collection sessions
+- `Analysis`: Signal processing results and findings
+- `Publication`: Research papers documenting experiments
 
 **Edges (Relationships):**
-- `Friendship`: Person ↔ Person bidirectional relationships
-- `Attendance`: Person → Event (labeled "Attended")
-- `Mention`: Post → Person (labeled "Mentioned")
-- `EventLocation`: Event → Location (labeled "HasLocation")
+- `Collaboration`: Researcher ↔ Researcher research partnerships
+- `Leads`: Researcher → Experiment (principal investigator)
+- `Conducts`: Researcher → Session
+- `PartOf`: Session → Experiment
+- `RecordedIn`: SignalData → Session
+- `RecordedWith`: SignalData → Device
+- `Analyzes`: Analysis → SignalData
+- `PerformedBy`: Researcher → Analysis
+- `Uses`: Experiment → Device
+- `Documents`: Publication → Experiment
 
 ### Agent Development Pattern
 
@@ -115,38 +138,41 @@ Agents are built using Google ADK and extend base classes like `LlmAgent`, `Loop
 ### API Endpoints
 
 **Web Routes:**
-- `GET /` - Home page with posts and events
-- `GET /person/<person_id>` - Person profile
-- `GET /event/<event_id>` - Event details with map
-- `GET /introvert-ally` - AI social planning assistant
+- `GET /` - Home page with experiments and research data
+- `GET /researcher/<researcher_id>` - Researcher profile and publications
+- `GET /experiment/<experiment_id>` - Experiment details with protocol
+- `GET /neurohub-ally` - AI research planning assistant
 
 **REST APIs:**
-- `POST /api/posts` - Create a new post
-- `POST /api/events` - Create an event with locations and attendees
+- `POST /api/experiments` - Create a new experiment
+- `POST /api/analyses` - Submit analysis results
+- `POST /api/sessions` - Log experimental sessions
 
 **SSE Endpoints:**
-- `GET /introvert-ally/stream-plan` - Stream AI-generated social plans
-- `GET /introvert-ally/stream-post-status` - Stream creation status updates
+- `GET /neurohub-ally/stream-protocol` - Stream AI-generated research protocols
+- `GET /neurohub-ally/stream-analysis-status` - Stream analysis progress updates
 
 ### Key Environment Variables
 
 ```bash
 # Google Cloud
-GOOGLE_CLOUD_PROJECT
-SPANNER_INSTANCE_ID
-SPANNER_DATABASE_ID
+GOOGLE_CLOUD_PROJECT      # Your GCP project ID
+SPANNER_INSTANCE_ID       # Default: neurohub-graph-instance
+SPANNER_DATABASE_ID       # Default: neurohub-db
+GOOGLE_CLOUD_LOCATION     # Default: us-central1
 
 # Application
-FLASK_SECRET_KEY
-APP_HOST
-APP_PORT
+FLASK_SECRET_KEY          # Session encryption key
+APP_HOST                  # Default: 0.0.0.0
+APP_PORT                  # Default: 8080
 
 # APIs
-GOOGLE_MAPS_API_KEY
-GOOGLE_MAPS_MAP_ID
+GOOGLE_MAPS_API_KEY       # For location visualization
+GOOGLE_MAPS_MAP_ID        # Map styling ID
+GOOGLE_GENAI_USE_VERTEXAI # Set to TRUE for Vertex AI
 
 # MCP Configuration
-MCP_SERVER_URL
+MCP_SERVER_URL            # MCP server endpoint
 ```
 
 ### Development Patterns
@@ -161,15 +187,23 @@ MCP_SERVER_URL
 
 ### Testing Approach
 
-- Test agents using `*_test_client.py` scripts
+- Test agents using test client scripts (e.g., `instavibe_test_client.py`)
 - Use the ADK `Runner` class for agent execution
 - No traditional unit tests; testing is integration-focused
-- Use `planner_eval.evalset.json` for planner agent evaluation
+- Test queries can be modified in client scripts to test different scenarios
 
 ### Deployment
 
 - Docker containers for each service
 - Google Cloud Run for hosting
-- Cloud Build for CI/CD
+- Cloud Build for CI/CD (`gcloud builds submit`)
 - Port 8080 exposed for all services
 - Multi-stage Docker builds with dependency caching
+
+### Important Notes
+
+1. **Database Connection**: The app expects a Spanner instance named `neurohub-graph-instance` with database `neurohub-db`. Update these in environment variables if different.
+2. **Authentication**: Ensure proper Google Cloud authentication before running (`gcloud auth login`)
+3. **Property Graph**: The database uses Spanner's property graph feature for relationship queries
+4. **Agent Communication**: Agents communicate via A2A protocol on separate ports
+5. **MCP Tools**: Tools are exposed via MCP server and accessed by agents through SSE transport
