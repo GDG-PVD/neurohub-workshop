@@ -9,7 +9,7 @@ import humanize
 import uuid
 import traceback
 from dateutil import parser 
-from ally_routes import ally_bp 
+from neurohub_routes import ally_bp 
 
 
 app = Flask(__name__)
