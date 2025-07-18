@@ -10,8 +10,8 @@ from google.cloud.spanner_v1 import param_types
 from google.api_core import exceptions
 
 # --- Spanner Configuration ---
-INSTANCE_ID = os.environ.get("SPANNER_INSTANCE_ID", "instavibe-graph-instance")
-DATABASE_ID = os.environ.get("SPANNER_DATABASE_ID", "graphdb")
+INSTANCE_ID = os.environ.get("SPANNER_INSTANCE_ID", "neurohub-graph-instance")
+DATABASE_ID = os.environ.get("SPANNER_DATABASE_ID", "neurohub-db")
 PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT")
 
 if not PROJECT_ID:

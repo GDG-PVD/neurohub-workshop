@@ -67,10 +67,11 @@ NeuroHub transforms the original social media architecture into a neurotechnolog
 
 ## Technical Stack
 
-- **Google Cloud Platform**: Vertex AI, Cloud Run, Spanner, Agent Engine
+- **Google Cloud Platform**: Vertex AI, Cloud Run, Spanner (Standard Edition), Agent Engine
 - **Frameworks**: Google ADK, A2A Protocol, MCP
-- **Database**: Spanner with Graph capabilities for research relationships
+- **Database**: Spanner with SQL queries for research relationships
 - **Language Models**: Gemini 2.0 Flash
+- **Development Environment**: Google Cloud Shell (cloud-native)
 
 ## Prerequisites
 
@@ -79,11 +80,36 @@ NeuroHub transforms the original social media architecture into a neurotechnolog
 - Understanding of AI agents and LLMs
 - Interest in neurotechnology applications
 
-## Quick Start
+## Quick Start (Google Cloud Shell)
 
-1. Clone this repository
-2. Follow the setup instructions in the workshop guide
-3. Deploy the agents and start experimenting!
+1. Open Cloud Shell: [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/GDG-PVD/neurohub-workshop&page=editor&open_in_editor=README.md)
+2. Run the initialization: `bash init.sh && source set_env.sh`
+3. Follow the [Workshop Guide](docs/WORKSHOP_GUIDE.md) or [Cloud Shell Guide](docs/CLOUD_SHELL_GUIDE.md)
+4. Access the app via Cloud Shell's Web Preview on port 8080
+
+## Documentation
+
+### 📚 Workshop Materials
+- [**Workshop Guide**](docs/WORKSHOP_GUIDE.md) - Step-by-step instructions for the workshop
+- [**Cloud Shell Guide**](docs/CLOUD_SHELL_GUIDE.md) - Cloud-native development instructions
+- [**Quick Reference**](docs/QUICK_REFERENCE.md) - Command cheat sheet
+- [**Setup Checklist**](docs/SETUP_CHECKLIST.md) - Pre-workshop verification
+- [**Detailed Setup Guide**](docs/DETAILED_SETUP_GUIDE.md) - Comprehensive setup with screenshots
+- [**Troubleshooting Guide**](docs/TROUBLESHOOTING.md) - Common issues and solutions
+
+### 🤖 Development Guides
+- [**AI Development Guide**](docs/AI_DEVELOPMENT_GUIDE.md) - Best practices for AI-assisted coding
+- [**Prompt Examples**](docs/prompt-examples.md) - Tested prompts for NeuroHub development
+- [**C4 Architecture**](C4_ARCHITECTURE.md) - System architecture diagrams
+- [**Decision Registry**](DECISION_REGISTRY.md) - Quick reference for all decisions
+
+### 📐 Architecture Decisions
+- [**ADR Index**](docs/adr/index.md) - All architecture decision records
+- [**ADR Template**](docs/adr/template.md) - Template for new decisions
+
+### 📝 Templates
+- [**Module README Template**](docs/templates/module-readme.md)
+- [**Agent README Template**](docs/templates/agent-readme.md)
 
 ## Use Cases
 

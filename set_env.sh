@@ -6,10 +6,10 @@
 
 # --- Configuration ---
 PROJECT_FILE="~/project_id.txt"
-SPANNER_INSTANCE_ID="instavibe-graph-instance"
-SPANNER_DATABASE_ID="graphdb"
+SPANNER_INSTANCE_ID="neurohub-graph-instance"
+SPANNER_DATABASE_ID="neurohub-db"
 GOOGLE_CLOUD_LOCATION="us-central1"
-REPO_NAME="introveally-repo"
+REPO_NAME="neurohub-repo"
 MAPKEY_FILE="~/mapkey.txt"
 # ---------------------
 

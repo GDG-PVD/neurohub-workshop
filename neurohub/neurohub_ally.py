@@ -29,7 +29,7 @@ def call_agent_for_plan(user_name, planned_date, location_n_perference, selected
 
     prompt_message = f"""Plan a personalized night out for {user_name} with friends {selected_friend_names_str} on {planned_date}, with the location or preference being "{location_n_perference}".
 
-    Analyze friend interests (if possible, use Instavibe profiles or summarized interests) to create a tailored plan.  Ensure the plan includes the date {planned_date}.
+    Analyze friend interests (if possible, use NeuroHub profiles or summarized interests) to create a tailored plan.  Ensure the plan includes the date {planned_date}.
 
     Output the entire plan in a SINGLE, COMPLETE JSON object with the following structure.  **CRITICAL: The FINAL RESPONSE MUST BE ONLY THIS JSON.  If any fields are missing or unavailable, INVENT them appropriately to complete the JSON structure.  Do not return any conversational text or explanations.  Just the raw, valid JSON.**
 
@@ -126,7 +126,7 @@ def call_agent_for_plan(user_name, planned_date, location_n_perference, selected
 
 def post_plan_event(user_name, confirmed_plan, edited_invite_message, agent_session_user_id):
     """
-    Simulates an agent posting an event and a message to Instavibe.
+    Simulates an agent posting an event and a message to NeuroHub.
     Yields 'thought' events for logging.
     """
     yield {"type": "thought", "data": f"--- Post Plan Event Agent Call Initiated ---"}
@@ -137,9 +137,9 @@ def post_plan_event(user_name, confirmed_plan, edited_invite_message, agent_sess
     yield {"type": "thought", "data": f"Initiating process to post event and invite for {user_name}."}
 
     prompt_message = f"""
-    You are an Orchestrator assistant for the Instavibe platform. User '{user_name}' has finalized an event plan and wants to:
-    1. Create the event on Instavibe.
-    2. Create an invite post for this event on Instavibe.
+    You are an Orchestrator assistant for the NeuroHub platform. User '{user_name}' has finalized an event plan and wants to:
+    1. Create the event on NeuroHub.
+    2. Create an invite post for this event on NeuroHub.
 
     You have tools like `list_remote_agents` to discover available specialized agents and `send_task(agent_name: str, message: str)` to delegate tasks to them.
     Your primary role is to understand the user's overall goal, identify the necessary steps, select the most appropriate remote agent(s) for those steps, and then send them clear instructions.
@@ -154,8 +154,8 @@ def post_plan_event(user_name, confirmed_plan, edited_invite_message, agent_sess
 
     Your explicit tasks are, in this exact order:
 
-    TASK 1: Create the Event on Instavibe.
-    - First, identify a suitable remote agent that is capable of creating events on the Instavibe platform. You should use your `list_remote_agents` tool if you need to refresh your knowledge of available agents and their capabilities.
+    TASK 1: Create the Event on NeuroHub.
+    - First, identify a suitable remote agent that is capable of creating events on the NeuroHub platform. You should use your `list_remote_agents` tool if you need to refresh your knowledge of available agents and their capabilities.
     - Once you have selected an appropriate agent, you MUST use your tool to instruct that agent to create the event.
     - The `message` you send to the agent for this task should be a clear, natural language instruction. This message MUST include all necessary details for event creation, derived from the "Confirmed Plan" JSON:
         - Event Name: "{confirmed_plan.get('event_name', 'Unnamed Event')}"
@@ -166,7 +166,7 @@ def post_plan_event(user_name, confirmed_plan, edited_invite_message, agent_sess
     - Narrate your thought process: which agent you are selecting (or your criteria if you can't name it), and the natural language message you are formulating for the tool to create the event.
     - After the  tool call is complete, briefly acknowledge its success based on the tool's response.
 
-    TASK 2: Create the Invite Post on Instavibe.
+    TASK 2: Create the Invite Post on NeuroHub.
     - Only after TASK 1 (event creation) is confirmed as  successful, you MUST use your tool again.
     - The `message` you send to the agent for this task should be a clear, natural language instruction to create a post. This message MUST include:
         - The author of the post: "{user_name}"
@@ -180,7 +180,7 @@ def post_plan_event(user_name, confirmed_plan, edited_invite_message, agent_sess
     - Your primary role here is to orchestrate these two actions by selecting an appropriate remote agent and sending it clear, natural language instructions via your  tool.
     - Your responses during this process should be a stream of consciousness, primarily narrating your agent selection (if applicable), the formulation of your natural language messages for , and theiroutcomes.
     - Do NOT output any JSON yourself. Your output must be plain text only, describing your actions.
-    - Conclude with a single, friendly success message confirming that you have (simulated) instructing the remote agent to create both the event and the post. For example: "Alright, I've instructed the appropriate Instavibe agent to create the event '{confirmed_plan.get('event_name', 'Unnamed Event')}' and to make the invite post for {user_name}!"
+    - Conclude with a single, friendly success message confirming that you have (simulated) instructing the remote agent to create both the event and the post. For example: "Alright, I've instructed the appropriate NeuroHub agent to create the event '{confirmed_plan.get('event_name', 'Unnamed Event')}' and to make the invite post for {user_name}!"
 
     """
 

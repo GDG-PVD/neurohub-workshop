@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-BASE_URL = os.environ.get("INSTAVIBE_BASE_URL")
+BASE_URL = os.environ.get("NEUROHUB_BASE_URL")
 
 #REPLACE ME CREATE POST
 

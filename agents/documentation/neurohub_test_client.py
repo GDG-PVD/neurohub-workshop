@@ -19,10 +19,10 @@ async def async_main():
   artifacts_service = InMemoryArtifactService()
 
   session = session_service.create_session(
-      state={}, app_name='mcp_instavibe_app', user_id='user_dc'
+      state={}, app_name='mcp_neurohub_app', user_id='user_dc'
   )
 
-  query = "Create an event for me, the event is going to movie night on Friday the movie is ET, and I'm Mike, I'll be the organizer and the date 2025/10/13 8:00pm EST"
+  query = "Generate a research report for experiment EXP001 that studied EEG alpha wave patterns during meditation. Include sections on methodology (20 participants, 30-minute sessions), key findings (25% increase in alpha power), and recommendations for future BCI applications."
   print(f"User Query: '{query}'")
   content = types.Content(role='user', parts=[types.Part(text=query)])
 
@@ -30,7 +30,7 @@ async def async_main():
 
   async with exit_stack:
       runner = Runner(
-          app_name='mcp_instavibe_app',
+          app_name='mcp_neurohub_app',
           agent=root_agent,
           artifact_service=artifacts_service, # Optional
           session_service=session_service,
