@@ -3,6 +3,8 @@
 
 Welcome to the NeuroHub workshop! In this hands-on session, you'll learn to build a multi-agent AI system for neurotechnology research using Google's cutting-edge AI infrastructure.
 
+> **📚 Full Codelab**: For detailed step-by-step instructions that follow the complete workshop flow, see the [NeuroHub Codelab](NEUROHUB_CODELAB.md). This guide provides a quick reference version.
+
 ## What You'll Build
 
 You'll create NeuroHub, an AI-powered platform that helps researchers:

@@ -90,12 +90,14 @@ NeuroHub transforms the original social media architecture into a neurotechnolog
 ## Documentation
 
 ### 📚 Workshop Materials
-- [**Workshop Guide**](docs/WORKSHOP_GUIDE.md) - Step-by-step instructions for the workshop
+- [**NeuroHub Codelab**](docs/NEUROHUB_CODELAB.md) - Complete step-by-step workshop following the codelab format
+- [**Workshop Guide**](docs/WORKSHOP_GUIDE.md) - Quick reference guide for the workshop
 - [**Cloud Shell Guide**](docs/CLOUD_SHELL_GUIDE.md) - Cloud-native development instructions
 - [**Quick Reference**](docs/QUICK_REFERENCE.md) - Command cheat sheet
 - [**Setup Checklist**](docs/SETUP_CHECKLIST.md) - Pre-workshop verification
 - [**Detailed Setup Guide**](docs/DETAILED_SETUP_GUIDE.md) - Comprehensive setup with screenshots
 - [**Troubleshooting Guide**](docs/TROUBLESHOOTING.md) - Common issues and solutions
+- [**InstaVibe to NeuroHub Mapping**](docs/INSTAVIBE_TO_NEUROHUB_MAPPING.md) - How we adapted the original codelab
 
 ### 🤖 Development Guides
 - [**AI Development Guide**](docs/AI_DEVELOPMENT_GUIDE.md) - Best practices for AI-assisted coding
