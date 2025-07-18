@@ -10,6 +10,13 @@
 - [x] Created module documentation templates
 - [x] Created prompt engineering examples
 
+### ✅ Completed: Workshop Codelab Documentation
+- [x] Created NEUROHUB_CODELAB.md with 1:1 InstaVibe mapping
+- [x] Created INSTAVIBE_TO_NEUROHUB_MAPPING.md showing transformations
+- [x] Updated README to reference codelab as primary guide
+- [x] Maintained all 13 sections from original workshop
+- [x] Adapted all examples to neurotechnology domain
+
 ### ✅ Completed: Cloud-Native Migration and SQL Implementation
 
 #### Cloud Shell Optimization

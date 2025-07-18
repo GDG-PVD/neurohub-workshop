@@ -11,6 +11,7 @@ This index tracks all architectural decisions made for the NeuroHub project.
 | [ADR-003](ADR-003-mcp-over-direct-api.md) | Use MCP for Agent-Platform Communication | 2024-07-15 | Accepted | architecture, integration | MCP provides standardized tool interface for agents |
 | [ADR-004](ADR-004-uv-package-manager.md) | Adopt UV for Package Management | 2024-07-18 | Accepted | tooling, performance | UV replaces pip for 10-100x faster package installation |
 | [ADR-005](ADR-005-sql-queries-over-graph.md) | Use SQL Queries Over Property Graph | 2025-07-18 | Accepted | architecture, database, cost | SQL queries on Spanner Standard Edition instead of Enterprise Property Graph |
+| [ADR-006](ADR-006-codelab-documentation.md) | Codelab-Style Documentation | 2025-07-18 | Accepted | documentation, workshop | Follow InstaVibe's 13-section structure adapted for neurotechnology |
 
 ## How to Use This Index
 
@@ -34,11 +35,13 @@ This index tracks all architectural decisions made for the NeuroHub project.
 - `signal-processing`: Biosignal analysis choices
 - `database`: Database and data model decisions
 - `dependencies`: External library decisions
+- `documentation`: Documentation approach decisions
 - `environment`: Development environment choices
 - `tooling`: Development tool selections
 - `integration`: System integration approaches
 - `performance`: Performance-related decisions
 - `cost`: Cost optimization decisions
+- `workshop`: Workshop-specific decisions
 - `ai-generated`: Decisions made with AI assistance
 - `security`: Security-related choices
 - `testing`: Testing approach decisions

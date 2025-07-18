@@ -27,6 +27,7 @@ This registry tracks all architectural and technical decisions for the NeuroHub 
 | Decision | Date | Impact | Status | Link |
 |----------|------|--------|--------|------|
 | ADR format for decisions | 2024-07-18 | Low | ✅ Accepted | [ADR Template](docs/adr/template.md) |
+| Codelab-style documentation | 2025-07-18 | High | ✅ Accepted | [ADR-006](docs/adr/ADR-006-codelab-documentation.md) |
 | Modular documentation approach | 2024-07-18 | Medium | ✅ Accepted | [ADR-008](docs/adr/ADR-008-modular-docs.md) |
 | AI-assisted development practices | 2024-07-18 | Medium | ✅ Accepted | [ADR-009](docs/adr/ADR-009-ai-practices.md) |
 
