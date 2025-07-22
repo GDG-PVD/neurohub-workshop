@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Get MCP server URL from environment
-MCP_SERVER_URL = os.environ.get("MCP_SERVER_URL", "http://localhost:8080/sse")
+MCP_SERVER_URL = os.environ.get("MCP_SERVER_URL", "http://localhost:8001/sse")
 
 # Fetch tools from the NeuroHub MCP Server
 tools = MCPToolset(

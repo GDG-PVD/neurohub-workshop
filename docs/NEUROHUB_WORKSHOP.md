@@ -258,10 +258,10 @@ cd tools/neurohub && python mcp_server.py
 
 ### Understanding ADK Concepts
 
-Google ADK provides three types of agents:
-- **BaseAgent**: Simple request-response
-- **LlmAgent**: Adds LLM reasoning
-- **LoopAgent**: Iterative processing with state
+Google ADK provides powerful agent building blocks:
+- **Agent**: Base class with LLM reasoning and tool use
+- **MCPToolset**: Connects agents to MCP servers
+- **Runner**: Executes agents with session management
 
 ### Build the Documentation Agent
 
@@ -272,17 +272,20 @@ cd ~/neurohub-workshop/agents/documentation
 
 Look at the agent structure:
 ```python
-# agent.py - Core agent logic
-class DocumentationAgent(BaseAgent):
-    def process_request(self, request):
-        # Your agent logic here
+# agent.py - Core agent logic using Google ADK
+root_agent = Agent(
+    name="documentation_agent",
+    model="gemini-2.0-flash",
+    description="Agent responsible for creating research documentation...",
+    instruction="You are a specialized documentation agent..."
+)
 ```
 
 ### Test Your Agent Locally
 
 ```bash
 # Run the test client
-python instavibe_test_client.py
+python neurohub_test_client.py
 ```
 
 Try these prompts:
@@ -291,15 +294,10 @@ Try these prompts:
 
 ### Wrap with A2A Protocol
 
-The agent is already wrapped for network communication:
-```python
-# documentation_agent.py
-agent = A2AAgent(
-    agent_id="documentation-agent",
-    agent=DocumentationAgent(),
-    port=8002
-)
-```
+The agent is already wrapped for network communication in `a2a_server.py`:
+- Exposes the agent on port 10002
+- Provides agent discovery endpoint
+- Handles task execution requests
 
 ### Start the Agent Server
 
@@ -307,7 +305,7 @@ agent = A2AAgent(
 python a2a_server.py
 ```
 
-Your agent is now running on port 8002!
+Your agent is now running on port 10002!
 
 ### Connect to NeuroHub Ally
 
@@ -342,11 +340,12 @@ Check `tools/neurohub/mcp_server.py`:
 
 ### Enable MCP in Your Agent
 
-The connection is already configured:
+The connection is already configured in the documentation agent:
 ```python
-# In agent initialization
-self.mcp_client = MCPClient(server_url="http://localhost:8001")
-tools = self.mcp_client.list_tools()
+# From agent.py
+tools = MCPToolset(
+    connection_params=SseServerParams(url="http://localhost:8001/sse", headers={})
+)
 ```
 
 ### Test Tool Usage
