@@ -426,11 +426,11 @@ In the query editor, paste and run:
 ```sql
 SELECT 
     r.name AS researcher_name,
-    e.title AS experiment_title
+    e.name AS experiment_name
 FROM 
     Researcher r
 JOIN 
-    Experiment e ON r.id = e.lead_researcher_id
+    Experiment e ON r.researcher_id = e.principal_investigator_id
 LIMIT 5;
 ```
 
