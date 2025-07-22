@@ -144,6 +144,8 @@ Project ID saved to ~/project_id.txt
 Initialization complete!
 ```
 
+## ![Screenshot 2025-07-22 at 3.09.26 PM](/Users/stephenszermer/Library/Application Support/typora-user-images/Screenshot 2025-07-22 at 3.09.26 PM.png)
+
 ## Part 4: Enable Google Cloud APIs
 
 ### Set Project Configuration
@@ -422,10 +424,14 @@ You should see output showing tables being created and sample data being loaded.
 In the query editor, paste and run:
 
 ```sql
-Graph NeuroResearchGraph
-MATCH (r:Researcher)-[:Leads]->(e:Experiment)
-RETURN r.name, e.title
-LIMIT 5
+SELECT 
+    r.name AS researcher_name,
+    e.title AS experiment_title
+FROM 
+    Researcher r
+JOIN 
+    Experiment e ON r.id = e.lead_researcher_id
+LIMIT 5;
 ```
 
 Click **RUN**. You should see results showing researchers and their experiments.
