@@ -18,6 +18,10 @@ This workshop was created for the **BGU-Brown Summer School: Embodied Brain Tech
 - Biosignal processing
 - Entrepreneurship in neurotech
 
+## Quick Start
+
+**📚 Workshop Participants**: Start with [**docs/NEUROHUB_WORKSHOP.md**](docs/NEUROHUB_WORKSHOP.md) - our comprehensive guide that includes setup, all modules, troubleshooting, and teardown instructions.
+
 ## What You'll Learn
 
 1. **Foundations with Google's ADK**: Build intelligent agents for biosignal analysis and experiment design
