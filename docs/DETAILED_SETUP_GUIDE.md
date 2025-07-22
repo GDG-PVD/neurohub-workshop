@@ -475,6 +475,48 @@ If you've completed all these steps:
 
 You're ready to begin Module 1 of the workshop!
 
+## Next Steps
+
+### 🚀 Start the Workshop
+
+Now that your environment is set up, you have two options:
+
+1. **Follow the Workshop Guide** (Recommended for workshop participants)
+   - Open [WORKSHOP_GUIDE.md](WORKSHOP_GUIDE.md)
+   - Start with Module 1: Understanding the Application
+   - Progress through each module in order
+
+2. **Quick Start** (If you want to see everything running)
+   ```bash
+   # Terminal 1: Start the web app
+   cd ~/neurohub-workshop/neurohub
+   python app.py
+   
+   # Terminal 2: Start MCP server
+   cd ~/neurohub-workshop/tools/neurohub
+   python mcp_server.py
+   
+   # Terminal 3: Start an agent
+   cd ~/neurohub-workshop/agents/documentation
+   python a2a_server.py
+   ```
+   
+   Then visit http://localhost:8080 in your browser!
+
+### 📚 Additional Resources
+
+- **[WORKSHOP_GUIDE.md](WORKSHOP_GUIDE.md)** - Step-by-step workshop modules
+- **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** - Commands and ports reference
+- **[WORKSHOP_TROUBLESHOOTING_GUIDE.md](WORKSHOP_TROUBLESHOOTING_GUIDE.md)** - Common issues and solutions
+- **[DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)** - Complete documentation overview
+
+### 💡 Tips for Success
+
+1. Keep this terminal window open - you'll need it throughout the workshop
+2. Open multiple Cloud Shell tabs (click the + icon) for running different services
+3. Remember to `source set_env.sh` in each new terminal
+4. The workshop is designed to be completed in order - don't skip modules!
+
 ## Troubleshooting During Setup
 
 ### "Permission denied" errors
