@@ -516,6 +516,7 @@ Now that your environment is set up, you have two options:
 2. Open multiple Cloud Shell tabs (click the + icon) for running different services
 3. Remember to `source set_env.sh` in each new terminal
 4. The workshop is designed to be completed in order - don't skip modules!
+5. **Firebase deployment comes in Module 6** - focus on local development first!
 
 ## Troubleshooting During Setup
 

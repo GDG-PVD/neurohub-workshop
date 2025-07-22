@@ -1,0 +1,19 @@
+{
+  "hosting": {
+    "public": "neurohub/static",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "run": {
+          "serviceId": "neurohub-app",
+          "region": "us-central1"
+        }
+      }
+    ]
+  }
+}

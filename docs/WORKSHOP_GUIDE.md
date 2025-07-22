@@ -13,6 +13,14 @@ You'll create NeuroHub, an AI-powered platform that helps researchers:
 - Generate research documentation
 - Coordinate complex research workflows
 
+### Development Approach
+
+This workshop uses a **hybrid development model**:
+- **Modules 1-6**: Rapid development in Cloud Shell with instant feedback
+- **Module 6 (Final)**: Deploy to Firebase for a production-ready, shareable application
+
+This approach lets you focus on learning AI concepts without deployment complexity, then experience the satisfaction of sharing your creation with the world!
+
 ## Prerequisites
 
 Before starting, ensure you have:
@@ -54,9 +62,10 @@ Before starting, ensure you have:
 - Create end-to-end workflows
 
 ### Part 7: Production Deployment (30 min)
-- Deploy to Google Cloud Run
-- Integrate with web application
-- Test complete system
+- Deploy backend services to Google Cloud Run
+- Deploy frontend to Firebase Hosting
+- Get a shareable public URL
+- Showcase your multi-agent AI system to the world!
 
 ## Getting Started
 
@@ -273,6 +282,87 @@ cd agents/research_orchestrator && python a2a_server.py
 2. Select **Preview on port 8080**
 3. Click **NeuroHub Ally**
 4. Try: "Help me design an EEG experiment for studying attention"
+
+## Module 6: Deploy to Firebase (Production)
+
+### Overview
+
+Now that you've built and tested your multi-agent system locally, let's deploy it to Firebase Hosting so you can share it with others!
+
+### Why Firebase?
+
+- **Persistent URL**: Get a permanent link to share your project
+- **Production experience**: See your app running in a real cloud environment
+- **Portfolio ready**: Great for showcasing your work
+
+### Deployment Steps
+
+1. **Ensure all services are working locally**
+   - Test the web app, MCP server, and at least one agent
+   - Make sure NeuroHub Ally is responding correctly
+
+2. **Commit your changes** (if any)
+   ```bash
+   git add -A
+   git commit -m "feat: Add my custom agent implementations"
+   ```
+
+3. **Run the deployment script**
+   ```bash
+   cd ~/neurohub-workshop
+   ./deploy_to_firebase.sh
+   ```
+
+   This script will:
+   - Deploy your Flask backend to Cloud Run
+   - Set up Firebase Hosting
+   - Configure the routing between Firebase and Cloud Run
+   - Give you a public URL to share!
+
+4. **Test your deployed application**
+   - Visit the Firebase URL shown in the output
+   - Test all functionality (may take a minute to fully deploy)
+   - Share the URL with others!
+
+### What Gets Deployed?
+
+- **Frontend**: Static files served by Firebase Hosting (fast CDN)
+- **Backend**: Flask app running on Cloud Run (auto-scaling)
+- **Agents**: Also deployed to Cloud Run (accessible by the backend)
+- **Database**: Uses the same Spanner instance (already in cloud)
+
+### Post-Deployment
+
+After deployment, you have:
+- A public URL anyone can access
+- Auto-scaling based on traffic
+- Automatic HTTPS/SSL
+- Global CDN for fast loading
+
+### Troubleshooting Deployment
+
+**"Permission denied" error:**
+```bash
+chmod +x deploy_to_firebase.sh
+```
+
+**"Firebase CLI not found":**
+```bash
+npm install -g firebase-tools
+firebase login
+```
+
+**"Service account error":**
+Make sure you have the necessary IAM roles from the setup phase.
+
+### 🎉 Congratulations!
+
+You've successfully:
+1. Built a multi-agent AI system
+2. Integrated with Google's AI tools (ADK, A2A, MCP)
+3. Deployed to production on Google Cloud
+
+Your NeuroHub instance is now live and shareable!
 
 ## Common Commands Cheat Sheet
 
