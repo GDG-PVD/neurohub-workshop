@@ -136,10 +136,22 @@ By the end of this workshop, you will:
 
 2. **Understand Data Model**
    ```sql
-   -- Run in Spanner Studio
-   Graph NeuroResearchGraph
-   MATCH (r:Researcher)-[rel]->(target)
-   RETURN DISTINCT type(rel), labels(target)
+   -- Run in Spanner Studio to see relationships
+   SELECT 
+       'Experiment' as relationship,
+       COUNT(*) as count
+   FROM Experiment e
+   JOIN Researcher r ON e.principal_investigator_id = r.researcher_id
+   UNION ALL
+   SELECT 
+       'Collaboration' as relationship,
+       COUNT(*) as count
+   FROM Collaboration
+   UNION ALL
+   SELECT 
+       'Analysis' as relationship,
+       COUNT(*) as count
+   FROM Analysis;
    ```
 
 3. **Review Architecture**

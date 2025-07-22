@@ -72,10 +72,9 @@ gcloud builds submit --config agents/cloudbuild.yaml \
 
 **Test Database Connection:**
 ```sql
-Graph NeuroResearchGraph
-MATCH (r:Researcher)
-RETURN r.name
-LIMIT 5
+SELECT name 
+FROM Researcher 
+LIMIT 5;
 ```
 
 **Find Experiments:**

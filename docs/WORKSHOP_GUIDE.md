@@ -161,9 +161,14 @@ cd ..
 5. Run this test query:
 
 ```sql
-Graph NeuroResearchGraph
-MATCH (r:Researcher)-[:Leads]->(e:Experiment)
-RETURN r.name, e.name
+SELECT 
+    r.name AS researcher_name,
+    e.name AS experiment_name
+FROM 
+    Researcher r
+JOIN 
+    Experiment e ON r.researcher_id = e.principal_investigator_id
+LIMIT 5;
 ```
 
 ## Module 2: Run the Base Application
