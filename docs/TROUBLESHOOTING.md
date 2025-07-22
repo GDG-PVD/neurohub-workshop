@@ -42,6 +42,53 @@ source .venv/bin/activate
 uv pip install -r requirements.txt
 ```
 
+### Missing aiohttp module
+
+**Symptom:**
+```
+ModuleNotFoundError: No module named 'aiohttp'
+```
+
+**Solution:**
+```bash
+# Make sure virtual environment is activated
+source .venv/bin/activate
+# Install aiohttp
+uv pip install aiohttp==3.9.5
+```
+
+## 🟡 MCP Server Issues
+
+### ADK Tool import error
+
+**Symptom:**
+```
+ImportError: cannot import name 'Tool' from 'google.adk.tools'
+```
+
+**Solution:**
+This is resolved in the current codebase. The MCP server now uses native MCP types instead of ADK tools. If you encounter this:
+1. Pull the latest code
+2. The MCP server should work without ADK Tool imports
+
+### MCP server port conflict
+
+**Symptom:**
+```
+Address already in use: 8001
+```
+
+**Solution:**
+1. Check what's using port 8001:
+   ```bash
+   lsof -i :8001
+   ```
+2. Kill the process or use a different port:
+   ```bash
+   export MCP_PORT=8002
+   python mcp_server.py
+   ```
+
 ## 🟡 Database Issues
 
 ### Spanner instance not found

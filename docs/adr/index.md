@@ -13,6 +13,7 @@ This index tracks all architectural decisions made for the NeuroHub project.
 | [ADR-005](ADR-005-sql-queries-over-graph.md) | Use SQL Queries Over Property Graph | 2025-07-18 | Accepted | architecture, database, cost | SQL queries on Spanner Standard Edition instead of Enterprise Property Graph |
 | [ADR-006](ADR-006-codelab-documentation.md) | Codelab-Style Documentation | 2025-07-18 | Accepted | documentation, workshop | Follow InstaVibe's 13-section structure adapted for neurotechnology |
 | [ADR-007](007-neurohub-ally-integration.md) | NeuroHub Ally AI Assistant Integration | 2025-07-22 | Accepted | architecture, integration, workshop | Web-based AI assistant interface with A2A agent connectivity and SSE streaming |
+| [ADR-008](008-mcp-server-implementation.md) | MCP Server Implementation Without ADK Tools | 2025-07-22 | Accepted | architecture, integration, tooling | Direct MCP implementation to resolve ADK import issues |
 
 ## How to Use This Index
 

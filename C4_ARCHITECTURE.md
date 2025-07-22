@@ -62,12 +62,12 @@ graph TB
 
 | Container | Technology | Purpose | Port |
 |-----------|------------|---------|------|
-| Web Application | Flask/Python | User interface, API endpoints | 8080 |
+| Web Application | Flask/Python | User interface, API endpoints, NeuroHub Ally | 8080 |
 | Research Orchestrator | ADK/A2A | Coordinates agent workflows | 8005 |
 | Signal Processor | ADK/A2A | Analyzes biosignals | 8003 |
 | Experiment Designer | ADK/A2A | Creates research protocols | 8004 |
 | Documentation Agent | ADK/A2A | Generates reports | 8002 |
-| MCP Tool Server | MCP/Python | Provides tools to agents | 8001 |
+| MCP Tool Server | FastMCP/Python | Provides tools to agents (native MCP) | 8001 |
 | Spanner Database | Google Spanner | Stores research data | - |
 
 ## Level 3: Component Diagram (Web Application)
@@ -167,14 +167,25 @@ Relationships (via Foreign Keys):
 
 ### MCP Tools Interface
 ```python
-@mcp_server.tool()
-async def create_experiment(
-    title: str,
-    researcher_id: str,
-    hypothesis: str,
-    methodology: str
-) -> str:
-    """Creates a new neuroscience experiment."""
+# Native MCP implementation (ADR-008)
+tool_schemas = {
+    "create_experiment": {
+        "name": "create_experiment",
+        "description": "Create a new neurotechnology experiment",
+        "inputSchema": {
+            "type": "object",
+            "properties": {...},
+            "required": [...]
+        }
+    }
+}
+
+@app.call_tool()
+async def call_tool(name: str, arguments: dict) -> list[mcp_types.TextContent]:
+    """Execute MCP tool calls."""
+    tool_function = tool_functions.get(name)
+    result = tool_function(**arguments)
+    return [mcp_types.TextContent(type="text", text=json.dumps(result))]
 ```
 
 ### A2A Communication Pattern
@@ -226,5 +237,7 @@ response = await a2a_client.send_task(
 
 - [ADR-003: MCP for Agent Communication](docs/adr/ADR-003-mcp-over-direct-api.md)
 - [ADR-005: SQL Queries Over Property Graph](docs/adr/ADR-005-sql-queries-over-graph.md)
+- [ADR-007: NeuroHub Ally Integration](docs/adr/007-neurohub-ally-integration.md)
+- [ADR-008: MCP Server Implementation](docs/adr/008-mcp-server-implementation.md)
 - [Cloud Shell Guide](docs/CLOUD_SHELL_GUIDE.md)
 - [Agent Development Guide](docs/AI_DEVELOPMENT_GUIDE.md)

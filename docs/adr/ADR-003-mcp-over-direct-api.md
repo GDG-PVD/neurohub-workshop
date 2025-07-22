@@ -110,6 +110,11 @@ result = await mcp_client.call_tool(
 - [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk)
 - [ADR-004: A2A Protocol](ADR-004-a2a-protocol.md)
 
+## Related Decisions
+
+- [ADR-007: NeuroHub Ally Integration](007-neurohub-ally-integration.md) - Uses MCP for tool access
+- [ADR-008: MCP Server Implementation](008-mcp-server-implementation.md) - Native MCP implementation details
+
 ## Notes
 
 This decision enables loose coupling between agents and platform, following microservices best practices while maintaining simplicity for workshop participants.
