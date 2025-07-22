@@ -53,11 +53,14 @@
 - [x] Created ADR-005 for SQL queries
 - [x] Cross-linked relevant documentation
 
-#### Pending Cleanup
-- [ ] Remove old InstaVibe files (db.py, person.html, etc.)
-- [ ] Update app.py to use db_neurohub.py
-- [ ] Remove IntrovertAlly feature files
-- [ ] Update templates to NeuroHub schema
+#### ✅ Completed Cleanup (July 22, 2024)
+- [x] Remove old InstaVibe files (db.py, person.html, etc.)
+- [x] Update app.py to use db_neurohub.py
+- [x] Remove IntrovertAlly feature files
+- [x] Update templates to NeuroHub schema
+- [x] Create researcher.html template
+- [x] Update neurohub_routes.py for research assistance
+- [x] Back up old files to old_instavibe_backup/
 
 ## 📋 Future Enhancements
 

@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}NeuroHub Ally - AI Research Assistant{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <h1 class="mb-4">NeuroHub Ally</h1>
+            <p class="lead">Your AI-powered research assistant for neurotechnology experiments</p>
+            
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">How can I help you today?</h5>
+                    <div class="list-group list-group-flush">
+                        <a href="#" class="list-group-item list-group-item-action" onclick="setPrompt('Help me design an EEG experiment for studying attention')">
+                            <i class="fas fa-brain text-primary"></i> Design an EEG experiment
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action" onclick="setPrompt('Analyze signal quality for my EMG data')">
+                            <i class="fas fa-wave-square text-success"></i> Analyze signal quality
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action" onclick="setPrompt('Create a research protocol for motor imagery BCI')">
+                            <i class="fas fa-clipboard-list text-info"></i> Create research protocol
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action" onclick="setPrompt('Recommend signal processing techniques for artifact removal')">
+                            <i class="fas fa-filter text-warning"></i> Signal processing advice
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Ask NeuroHub Ally</h5>
+                </div>
+                <div class="card-body">
+                    <form id="allyForm" method="POST" action="{{ url_for('ally.neurohub_ally_submit') }}">
+                        <div class="mb-3">
+                            <label for="research_query" class="form-label">Your Research Question</label>
+                            <textarea class="form-control" id="research_query" name="research_query" rows="4" 
+                                      placeholder="Example: I need help designing an experiment to study the effects of meditation on EEG alpha waves..." required></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="context" class="form-label">Additional Context (Optional)</label>
+                            <select class="form-select" id="context" name="context">
+                                <option value="">Select research area...</option>
+                                <option value="eeg">EEG Research</option>
+                                <option value="emg">EMG Research</option>
+                                <option value="ecg">ECG Research</option>
+                                <option value="bci">Brain-Computer Interface</option>
+                                <option value="signal_processing">Signal Processing</option>
+                                <option value="machine_learning">Machine Learning for Neurotech</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="experiment_type" class="form-label">Experiment Type (Optional)</label>
+                            <select class="form-select" id="experiment_type" name="experiment_type">
+                                <option value="">Select type...</option>
+                                <option value="cognitive">Cognitive Study</option>
+                                <option value="motor">Motor Control</option>
+                                <option value="sensory">Sensory Processing</option>
+                                <option value="clinical">Clinical Research</option>
+                                <option value="bci_training">BCI Training</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            <i class="fas fa-robot"></i> Get AI Assistance
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Response Area -->
+            <div id="responseArea" class="mt-4" style="display: none;">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">NeuroHub Ally Response</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="responseContent">
+                            <!-- Response will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function setPrompt(prompt) {
+    document.getElementById('research_query').value = prompt;
+    document.getElementById('research_query').focus();
+}
+
+// Handle form submission with AJAX for better UX
+document.getElementById('allyForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const responseArea = document.getElementById('responseArea');
+    const responseContent = document.getElementById('responseContent');
+    
+    // Show loading state
+    responseArea.style.display = 'block';
+    responseContent.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Processing...</span></div><p class="mt-2">NeuroHub Ally is thinking...</p></div>';
+    
+    // Submit form data
+    const formData = new FormData(this);
+    
+    try {
+        const response = await fetch(this.action, {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            responseContent.innerHTML = `
+                <div class="alert alert-success mb-3">
+                    <i class="fas fa-check-circle"></i> Analysis complete!
+                </div>
+                <div class="formatted-response">
+                    ${data.response}
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-sm btn-outline-primary" onclick="copyResponse()">
+                        <i class="fas fa-copy"></i> Copy Response
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="startNewQuery()">
+                        <i class="fas fa-redo"></i> New Query
+                    </button>
+                </div>
+            `;
+        } else {
+            responseContent.innerHTML = '<div class="alert alert-danger">An error occurred. Please try again.</div>';
+        }
+    } catch (error) {
+        responseContent.innerHTML = '<div class="alert alert-danger">Network error. Please check your connection.</div>';
+    }
+});
+
+function copyResponse() {
+    const responseText = document.querySelector('.formatted-response').innerText;
+    navigator.clipboard.writeText(responseText);
+    alert('Response copied to clipboard!');
+}
+
+function startNewQuery() {
+    document.getElementById('allyForm').reset();
+    document.getElementById('responseArea').style.display = 'none';
+}
+</script>
+{% endblock %}

@@ -21,11 +21,11 @@ This guide provides step-by-step instructions with specific navigation details f
 1. Click the project dropdown at the top of the page (might show "Select a project")
 2. Click **NEW PROJECT** in the dialog that appears
 3. Enter project details:
-   - **Project name**: `neurohub-workshop-[your-name]`
+   - **Project name**: `neurohub-workshop`
    - **Organization**: Leave as is
    - **Location**: Leave as is
 4. Click **CREATE**
-5. Wait for the notification that says "Created project neurohub-workshop-[your-name]"
+5. Wait for the notification that says "Created project neurohub-workshop"
 
 ### Enable Billing
 
@@ -65,7 +65,7 @@ This guide provides step-by-step instructions with specific navigation details f
 5. A browser tab will open - authorize Cloud Code
 6. Return to the editor
 7. Click the status bar again and select **Select a Google Cloud Project**
-8. Choose your `neurohub-workshop-[your-name]` project from the list
+8. Choose your `neurohub-workshop` project from the list
 
 ## Part 2: Find Your Project ID
 
@@ -74,7 +74,7 @@ Your Project ID is different from your Project Name. Here's how to find it:
 1. Go back to the Google Cloud Console tab
 2. Look at the project dropdown at the top of the page
 3. Click on it - you'll see your project listed with:
-   - **Name**: neurohub-workshop-[your-name]
+   - **Name**: neurohub-workshop
    - **ID**: Something like `neurohub-workshop-xyz123`
 4. Copy the Project ID - you'll need it soon
 

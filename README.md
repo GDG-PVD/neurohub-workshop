@@ -89,6 +89,13 @@ NeuroHub transforms the original social media architecture into a neurotechnolog
 
 ## Documentation
 
+### 🎯 Essential Workshop Guides
+- [**Workshop Master Guide**](docs/WORKSHOP_MASTER_GUIDE.md) - Complete workshop flow and overview
+- [**Complete Setup Guide**](docs/WORKSHOP_COMPLETE_SETUP_GUIDE.md) - Detailed step-by-step GCP setup
+- [**Troubleshooting Guide**](docs/WORKSHOP_TROUBLESHOOTING_GUIDE.md) - Comprehensive solutions to common issues
+- [**Teardown Guide**](docs/WORKSHOP_TEARDOWN_GUIDE.md) - Complete cleanup and resource removal
+- [**Instructor Guide**](docs/WORKSHOP_INSTRUCTOR_GUIDE.md) - For workshop facilitators and TAs
+
 ### 📚 Workshop Materials
 - [**NeuroHub Codelab**](docs/NEUROHUB_CODELAB.md) - Complete step-by-step workshop following the codelab format
 - [**Workshop Guide**](docs/WORKSHOP_GUIDE.md) - Quick reference guide for the workshop
