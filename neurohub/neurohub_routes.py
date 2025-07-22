@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, jsonify, flash, Response,
 import json 
 import traceback
 from db_neurohub import db, get_all_researchers
+from actual_ai_integration import stream_ai_response_sync
 
 # Blueprint for NeuroHub Ally routes
 ally_bp = Blueprint('ally', __name__, template_folder='templates')
@@ -119,6 +120,33 @@ def stream_protocol():
             
             yield f"data: {json.dumps(protocol)}\n\n"
             
+        except Exception as e:
+            yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
+    
+    return Response(
+        stream_with_context(generate()),
+        mimetype="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "X-Accel-Buffering": "no"
+        }
+    )
+
+@ally_bp.route('/api/neurohub-ally/stream', methods=['POST'])
+def stream_neurohub_ally():
+    """Stream AI responses from connected agents."""
+    def generate():
+        try:
+            # Get request data
+            data = request.get_json()
+            query = data.get('query', '')
+            context = data.get('context', '')
+            experiment_type = data.get('experiment_type', '')
+            
+            # Stream responses from AI agents
+            for chunk in stream_ai_response_sync(query, context, experiment_type):
+                yield chunk
+                
         except Exception as e:
             yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
     

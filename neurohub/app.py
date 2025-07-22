@@ -1,13 +1,14 @@
 import os
 from datetime import datetime, timezone
 from dotenv import load_dotenv
-from flask import Flask, render_template, abort, flash, request, jsonify
+from flask import Flask, render_template, abort, flash, request, jsonify, Response, stream_with_context
 from google.cloud import spanner
 from google.cloud.spanner_v1 import param_types
 from google.api_core import exceptions
 import humanize 
 import uuid
 import traceback
+from actual_ai_integration import stream_ai_response_sync
 from dateutil import parser 
 from neurohub_routes import ally_bp
 from db_neurohub import (
