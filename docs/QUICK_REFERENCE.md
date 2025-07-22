@@ -87,14 +87,16 @@ RETURN r.name, e.name
 
 ## 📍 Default Ports
 
-| Service | Port | URL |
-|---------|------|-----|
-| Flask App | 8080 | http://localhost:8080 |
-| MCP Server | 8001 | http://localhost:8001 |
-| Documentation Agent | 8002 | http://localhost:8002 |
-| Signal Processor | 8003 | http://localhost:8003 |
-| Experiment Designer | 8004 | http://localhost:8004 |
-| Orchestrator | 8005 | http://localhost:8005 |
+| Service | Port | Access in Cloud Shell |
+|---------|------|----------------------|
+| Flask App | 8080 | Web Preview → Preview on port 8080 |
+| MCP Server | 8001 | Internal service (localhost:8001) |
+| Documentation Agent | 8002 | Internal service (localhost:8002) |
+| Signal Processor | 8003 | Internal service (localhost:8003) |
+| Experiment Designer | 8004 | Internal service (localhost:8004) |
+| Orchestrator | 8005 | Internal service (localhost:8005) |
+
+**Note**: Only the Flask app (port 8080) needs web preview. Other services communicate internally via localhost.
 
 ## 🎯 Agent Names
 

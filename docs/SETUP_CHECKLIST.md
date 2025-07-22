@@ -99,7 +99,7 @@ Use this checklist to ensure you've completed all setup steps correctly.
 - [ ] Started Flask app (Terminal 1)
 - [ ] Started MCP server (Terminal 2)
 - [ ] No error messages in either terminal
-- [ ] Accessed http://localhost:8080
+- [ ] Accessed NeuroHub via Cloud Shell Web Preview (port 8080)
 - [ ] Home page loads correctly
 - [ ] Can view researcher profiles
 - [ ] Can view experiment details

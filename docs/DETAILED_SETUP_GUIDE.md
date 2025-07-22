@@ -501,7 +501,7 @@ Now that your environment is set up, you have two options:
    python a2a_server.py
    ```
    
-   Then visit http://localhost:8080 in your browser!
+   Then click the **Web Preview** button (🌐) in Cloud Shell toolbar and select **Preview on port 8080**!
 
 ### 📚 Additional Resources
 

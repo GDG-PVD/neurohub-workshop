@@ -117,7 +117,7 @@ By the end of this workshop, you will:
    ```
 
 ### Checkpoint
-✅ Can access NeuroHub at http://localhost:8080
+✅ Can access NeuroHub via Cloud Shell Web Preview (port 8080)
 ✅ See researchers and experiments in the UI
 ✅ Database queries work in Spanner Studio
 

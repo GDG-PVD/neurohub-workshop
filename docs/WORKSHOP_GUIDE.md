@@ -269,9 +269,10 @@ cd agents/research_orchestrator && python a2a_server.py
 
 ### Test NeuroHub Ally
 
-1. Navigate to http://localhost:8080
-2. Click **NeuroHub Ally**
-3. Try: "Help me design an EEG experiment for studying attention"
+1. Click the **Web Preview** button (🌐) in Cloud Shell toolbar
+2. Select **Preview on port 8080**
+3. Click **NeuroHub Ally**
+4. Try: "Help me design an EEG experiment for studying attention"
 
 ## Common Commands Cheat Sheet
 
