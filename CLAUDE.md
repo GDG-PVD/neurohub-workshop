@@ -139,12 +139,13 @@ gcloud artifacts repositories create neurohub-workshop \
 cd neurohub && python setup.py
 
 # Reset database (drops all tables)
-# Execute SQL from neurohub/reset.sql in Spanner console
+# Execute SQL from neurohub/reset_neurohub.sql in Spanner console
+# Note: neurohub/reset.sql contains old InstaVibe schema - use reset_neurohub.sql instead
 
 # Test graph queries in Spanner Studio
 Graph NeuroResearchGraph
 MATCH (r:Researcher)-[:Leads]->(e:Experiment)
-RETURN r.name, e.title
+RETURN r.name, e.name
 ```
 
 ## Architecture Overview

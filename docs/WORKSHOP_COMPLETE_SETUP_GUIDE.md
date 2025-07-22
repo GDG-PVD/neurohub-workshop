@@ -385,7 +385,7 @@ Sample data loaded successfully!
      ```sql
      Graph NeuroResearchGraph
      MATCH (r:Researcher)-[:Leads]->(e:Experiment)
-     RETURN r.name, e.title
+     RETURN r.name, e.name
      LIMIT 5
      ```
    - Click **RUN**

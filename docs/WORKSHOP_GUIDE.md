@@ -154,7 +154,7 @@ cd ..
 ```sql
 Graph NeuroResearchGraph
 MATCH (r:Researcher)-[:Leads]->(e:Experiment)
-RETURN r.name, e.title
+RETURN r.name, e.name
 ```
 
 ## Module 2: Run the Base Application

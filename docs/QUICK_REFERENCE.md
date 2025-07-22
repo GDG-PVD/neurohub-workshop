@@ -82,7 +82,7 @@ LIMIT 5
 ```sql
 Graph NeuroResearchGraph
 MATCH (r:Researcher)-[:Leads]->(e:Experiment)
-RETURN r.name, e.title
+RETURN r.name, e.name
 ```
 
 ## 📍 Default Ports
