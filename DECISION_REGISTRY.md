@@ -12,6 +12,7 @@ This registry tracks all architectural and technical decisions for the NeuroHub 
 | MCP for agent-platform communication | 2024-07-15 | High | ✅ Accepted | [ADR-003](docs/adr/ADR-003-mcp-over-direct-api.md) |
 | A2A protocol for agent communication | 2024-07-15 | High | ✅ Accepted | [ADR-004](docs/adr/ADR-004-a2a-protocol.md) |
 | SQL queries over Property Graph | 2025-07-18 | High | ✅ Accepted | [ADR-005](docs/adr/ADR-005-sql-queries-over-graph.md) |
+| NeuroHub Ally AI Assistant | 2025-07-22 | High | ✅ Accepted | [ADR-007](docs/adr/007-neurohub-ally-integration.md) |
 
 ### 🛠️ Technology Choices
 

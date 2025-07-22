@@ -3,9 +3,7 @@ NeuroHub AI Integration Module
 Connects the web application to A2A agents for AI-powered research assistance.
 """
 
-import os
 import json
-import requests
 import asyncio
 from typing import Dict, List, Optional, AsyncGenerator
 import aiohttp

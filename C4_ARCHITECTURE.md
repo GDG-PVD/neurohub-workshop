@@ -76,9 +76,10 @@ graph TB
 graph TB
     subgraph "Web Application Components"
         R[Routes<br/>neurohub_routes.py]
-        NA[NeuroHub Ally<br/>neurohub_ally.py]
-        DB[Database Layer<br/>db.py]
-        S[SSE Handler<br/>stream.py]
+        NA[NeuroHub Ally<br/>AI Assistant Interface]
+        AI[AI Integration<br/>actual_ai_integration.py]
+        DB[Database Layer<br/>db_neurohub.py]
+        S[SSE Handler<br/>Streaming]
         T[Templates<br/>Jinja2]
     end
     
@@ -86,7 +87,8 @@ graph TB
     R --> DB
     R --> S
     R --> T
-    NA --> DB
+    NA --> AI
+    AI --> S
 ```
 
 ### Component Details
@@ -98,8 +100,15 @@ graph TB
 
 **NeuroHub Ally**
 - AI research assistant interface
-- Orchestrates agent interactions
-- Manages conversation state
+- Routes queries to appropriate agents
+- Provides fallback responses when agents offline
+- Displays real-time agent responses
+
+**AI Integration**
+- Discovers available A2A agents
+- Routes queries based on content
+- Handles SSE streaming
+- Manages agent communication
 
 **Database Layer**
 - Spanner connection management

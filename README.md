@@ -69,6 +69,12 @@ NeuroHub transforms the original social media architecture into a neurotechnolog
    - Manages data flow between agents
    - Ensures proper documentation of all activities
 
+5. **NeuroHub Ally (Web Interface)**
+   - AI-powered research assistant accessible via navigation bar
+   - Routes queries to appropriate specialized agents
+   - Provides real-time streaming responses
+   - Works seamlessly with or without agents running
+
 ## Technical Stack
 
 - **Google Cloud Platform**: Vertex AI, Cloud Run, Spanner (Standard Edition), Agent Engine
