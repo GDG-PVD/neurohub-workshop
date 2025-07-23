@@ -230,7 +230,11 @@ cd tools/neurohub && python mcp_server.py
 
 1. Click **NeuroHub Ally** in the navigation
 2. Try this prompt: "What experiments are studying motor control?"
-3. Notice: It can't help yet - we need to build agents!
+3. You'll see one of two things:
+   - **Mock response** (if no agents are running) - This is expected for now!
+   - **"No AI agents available"** error - This means it's trying to connect to A2A agents
+
+**Note**: The NeuroHub Ally connects to A2A agent servers (covered in Module 5). For now, it shows mock responses, which is perfect for understanding the application structure.
 
 ### Understand the Architecture
 
