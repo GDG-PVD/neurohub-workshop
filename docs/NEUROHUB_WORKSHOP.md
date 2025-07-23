@@ -262,8 +262,13 @@ We've created a pre-built agent so you can see it working immediately!
 
 **Tab 3 - New Terminal:**
 ```bash
+# Set up environment first
+cd ~/neurohub-workshop
+source set_env.sh
+source .venv/bin/activate
+
 # Navigate to the workshop agent
-cd ~/neurohub-workshop/agents/workshop_agent
+cd agents/workshop_agent
 
 # Run the quick test
 python quick_test.py
@@ -278,6 +283,7 @@ You should see:
 
 Try the interactive mode:
 ```bash
+# Make sure you're still in the workshop_agent directory with virtual env active
 python interactive_test.py
 ```
 
@@ -397,9 +403,15 @@ This exposes your agent on port 10002 for the web app to discover!
 - Make sure you're in the right directory: `cd ~/neurohub-workshop/agents/workshop_agent`
 - List files: `ls -la`
 
-**Import errors?**
-- Activate virtual environment: `source ~/neurohub-workshop/.venv/bin/activate`
-- Re-install dependencies: `uv pip install -r requirements.txt`
+**Import errors (ModuleNotFoundError: No module named 'google.adk')?**
+- You forgot to activate the virtual environment!
+- Run these commands first:
+  ```bash
+  cd ~/neurohub-workshop
+  source set_env.sh
+  source .venv/bin/activate
+  ```
+- Then navigate back: `cd agents/workshop_agent`
 
 **Authentication errors?**
 - Re-source environment: `source ~/neurohub-workshop/set_env.sh`
