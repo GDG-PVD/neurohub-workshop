@@ -7,6 +7,7 @@ import asyncio
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.adk.artifacts import InMemoryArtifactService
+from google.genai import types
 from agent import workshop_agent
 from config import AGENT_NAME
 
@@ -24,12 +25,14 @@ async def interactive_test():
     
     # Create session
     session = session_service.create_session(
+        state={},
         app_name="workshop_agent_interactive",
         user_id="interactive_user"
     )
     
     # Create runner
     runner = Runner(
+        app_name="workshop_agent_interactive",
         agent=workshop_agent,
         session_service=session_service,
         artifact_service=artifact_service
@@ -53,13 +56,24 @@ async def interactive_test():
         # Get agent response
         print(f"\n🤖 {AGENT_NAME} is thinking...")
         
+        # Create content object
+        content = types.Content(role='user', parts=[types.Part(text=prompt)])
+        
         try:
-            result = await runner.run(
+            # Run agent
+            events_async = runner.run_async(
                 session_id=session.id,
-                prompt=prompt
+                user_id=session.user_id,
+                new_message=content
             )
             
-            print(f"\n🤖 {AGENT_NAME}: {result.response}")
+            # Collect response
+            response_text = ""
+            async for event in events_async:
+                if hasattr(event, 'text'):
+                    response_text += event.text
+            
+            print(f"\n🤖 {AGENT_NAME}: {response_text}")
             
         except Exception as e:
             print(f"\n❌ Error: {str(e)}")
