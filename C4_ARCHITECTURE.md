@@ -62,7 +62,7 @@ graph TB
 
 | Container | Technology | Purpose | Port |
 |-----------|------------|---------|------|
-| Web Application | Flask/Python | User interface, API endpoints, NeuroHub Ally | 8080 |
+| Web Application | Flask/Python | User interface, API endpoints, NeuroHub Ally, Bilingual UI (EN/HE) | 8080 |
 | Research Orchestrator | ADK/A2A | Coordinates agent workflows | 8005 |
 | Signal Processor | ADK/A2A | Analyzes biosignals | 8003 |
 | Experiment Designer | ADK/A2A | Creates research protocols | 8004 |
@@ -251,5 +251,7 @@ See [ADR-009: Workshop Agent Pattern](docs/adr/009-workshop-agent-pattern.md) fo
 - [ADR-007: NeuroHub Ally Integration](docs/adr/007-neurohub-ally-integration.md)
 - [ADR-008: MCP Server Implementation](docs/adr/008-mcp-server-implementation.md)
 - [ADR-009: Workshop Agent Pattern](docs/adr/009-workshop-agent-pattern.md)
+- [ADR-010: Bilingual Support](docs/adr/010-bilingual-support.md)
 - [Cloud Shell Guide](docs/CLOUD_SHELL_GUIDE.md)
 - [Agent Development Guide](docs/AI_DEVELOPMENT_GUIDE.md)
+- [Bilingual Implementation Guide](docs/BILINGUAL_IMPLEMENTATION.md)

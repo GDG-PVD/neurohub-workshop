@@ -63,6 +63,7 @@ The system attempts to connect to agents at these endpoints:
 - ADR-003: Technology Stack Selection (Flask, SSE support)
 - ADR-004: Multi-Agent Architecture Design (A2A protocol)
 - ADR-005: Development Environment Strategy (local-first approach)
+- ADR-010: Bilingual Support (UI language considerations for agent responses)
 
 ## References
 - [Server-Sent Events Specification](https://html.spec.whatwg.org/multipage/server-sent-events.html)

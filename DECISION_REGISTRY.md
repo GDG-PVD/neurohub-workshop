@@ -15,6 +15,7 @@ This registry tracks all architectural and technical decisions for the NeuroHub 
 | NeuroHub Ally AI Assistant | 2025-07-22 | High | ✅ Accepted | [ADR-007](docs/adr/007-neurohub-ally-integration.md) |
 | MCP Server native implementation | 2025-07-22 | High | ✅ Accepted | [ADR-008](docs/adr/008-mcp-server-implementation.md) |
 | Pre-built workshop agent pattern | 2025-07-23 | High | ✅ Accepted | [ADR-009](docs/adr/009-workshop-agent-pattern.md) |
+| Bilingual dashboard support | 2025-07-23 | Medium | ✅ Accepted | [ADR-010](docs/adr/010-bilingual-support.md) |
 
 ### 🛠️ Technology Choices
 
@@ -77,4 +78,4 @@ This registry tracks all architectural and technical decisions for the NeuroHub 
 - Annual review of all high-impact decisions
 - Continuous updates as new decisions are made
 
-Last updated: 2025-07-23
+Last updated: 2025-07-23 (Added bilingual support)

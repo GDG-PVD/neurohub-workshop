@@ -1,0 +1,604 @@
+{% extends "base.html" %}
+
+{% block title %}NeuroHub Dashboard - Research Overview | לוח בקרה - סקירת מחקר{% endblock %}
+
+{% block extra_css %}
+<style>
+    .lang-toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+    
+    [lang="he"] {
+        direction: rtl;
+        text-align: right;
+    }
+    
+    [lang="he"] .text-start {
+        text-align: right !important;
+    }
+    
+    [lang="he"] .text-end {
+        text-align: left !important;
+    }
+    
+    [lang="he"] .ms-2, [lang="he"] .me-2 {
+        margin-right: 0.5rem !important;
+        margin-left: 0 !important;
+    }
+    
+    [lang="he"] .float-end {
+        float: left !important;
+    }
+    
+    .bilingual-text {
+        display: none;
+    }
+    
+    .lang-en .en-text,
+    .lang-he .he-text {
+        display: inline;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Language Toggle -->
+<div class="lang-toggle">
+    <div class="btn-group" role="group">
+        <button type="button" class="btn btn-sm btn-outline-primary" onclick="setLanguage('en')">EN</button>
+        <button type="button" class="btn btn-sm btn-outline-primary" onclick="setLanguage('he')">עב</button>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="display-5">
+            <span class="en-text bilingual-text">Research Dashboard</span>
+            <span class="he-text bilingual-text">לוח בקרת מחקר</span>
+        </h1>
+        <p class="lead">
+            <span class="en-text bilingual-text">Welcome to NeuroHub - Your Neurotechnology Research Platform</span>
+            <span class="he-text bilingual-text">ברוכים הבאים ל-NeuroHub - פלטפורמת המחקר הנוירוטכנולוגית שלכם</span>
+        </p>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-flask fa-2x mb-2" style="color: var(--neuro-primary);"></i>
+                <h5 class="card-title">
+                    <span class="en-text bilingual-text">Active Experiments</span>
+                    <span class="he-text bilingual-text">ניסויים פעילים</span>
+                </h5>
+                <h2 class="text-primary">{{ active_experiments|default(12) }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-wave-square fa-2x mb-2" style="color: var(--neuro-secondary);"></i>
+                <h5 class="card-title">
+                    <span class="en-text bilingual-text">Signals Analyzed</span>
+                    <span class="he-text bilingual-text">אותות שנותחו</span>
+                </h5>
+                <h2 class="text-secondary">{{ signals_analyzed|default(847) }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-users fa-2x mb-2" style="color: var(--neuro-accent);"></i>
+                <h5 class="card-title">
+                    <span class="en-text bilingual-text">Researchers</span>
+                    <span class="he-text bilingual-text">חוקרים</span>
+                </h5>
+                <h2 style="color: var(--neuro-accent);">{{ total_researchers|default(24) }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-microchip fa-2x mb-2" style="color: #28a745;"></i>
+                <h5 class="card-title">
+                    <span class="en-text bilingual-text">Active Devices</span>
+                    <span class="he-text bilingual-text">מכשירים פעילים</span>
+                </h5>
+                <h2 class="text-success">{{ active_devices|default(8) }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity and Quick Actions -->
+<div class="row">
+    <!-- Recent Experiments -->
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-clock"></i> 
+                    <span class="en-text bilingual-text">Recent Experiments</span>
+                    <span class="he-text bilingual-text">ניסויים אחרונים</span>
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span class="en-text bilingual-text">Experiment</span>
+                                    <span class="he-text bilingual-text">ניסוי</span>
+                                </th>
+                                <th>
+                                    <span class="en-text bilingual-text">Lead Researcher</span>
+                                    <span class="he-text bilingual-text">חוקר ראשי</span>
+                                </th>
+                                <th>
+                                    <span class="en-text bilingual-text">Status</span>
+                                    <span class="he-text bilingual-text">סטטוס</span>
+                                </th>
+                                <th>
+                                    <span class="en-text bilingual-text">Last Activity</span>
+                                    <span class="he-text bilingual-text">פעילות אחרונה</span>
+                                </th>
+                                <th>
+                                    <span class="en-text bilingual-text">Actions</span>
+                                    <span class="he-text bilingual-text">פעולות</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for experiment in recent_experiments|default([]) %}
+                            <tr>
+                                <td>
+                                    <strong>{{ experiment.name }}</strong><br>
+                                    <small class="text-muted">{{ experiment.description[:50] }}...</small>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="researcher-avatar me-2">
+                                            {{ experiment.lead_researcher.name[:1] }}
+                                        </div>
+                                        <span>{{ experiment.lead_researcher.name }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="experiment-status status-{{ experiment.status }}">
+                                        <span class="en-text bilingual-text">{{ experiment.status|capitalize }}</span>
+                                        <span class="he-text bilingual-text">
+                                            {% if experiment.status == 'active' %}פעיל{% elif experiment.status == 'completed' %}הושלם{% else %}תכנון{% endif %}
+                                        </span>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="en-text bilingual-text">{{ experiment.last_activity }}</span>
+                                    <span class="he-text bilingual-text">
+                                        {% if 'hour' in experiment.last_activity %}לפני {{ experiment.last_activity.split()[0] }} שעות{% elif 'Yesterday' in experiment.last_activity %}אתמול{% else %}לפני {{ experiment.last_activity.split()[0] }} ימים{% endif %}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="/experiment/{{ experiment.id }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i> 
+                                        <span class="en-text bilingual-text">View</span>
+                                        <span class="he-text bilingual-text">צפה</span>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <!-- Sample data for demo -->
+                            <tr>
+                                <td>
+                                    <strong>
+                                        <span class="en-text bilingual-text">Motor Imagery BCI Study</span>
+                                        <span class="he-text bilingual-text">מחקר BCI דמיון מוטורי</span>
+                                    </strong><br>
+                                    <small class="text-muted">
+                                        <span class="en-text bilingual-text">Analyzing EEG patterns during motor imagery tasks...</span>
+                                        <span class="he-text bilingual-text">ניתוח דפוסי EEG במהלך משימות דמיון מוטורי...</span>
+                                    </small>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="researcher-avatar me-2">S</div>
+                                        <span>
+                                            <span class="en-text bilingual-text">Dr. Sarah Chen</span>
+                                            <span class="he-text bilingual-text">ד"ר שרה חן</span>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="experiment-status status-active">
+                                        <span class="en-text bilingual-text">Active</span>
+                                        <span class="he-text bilingual-text">פעיל</span>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="en-text bilingual-text">2 hours ago</span>
+                                    <span class="he-text bilingual-text">לפני שעתיים</span>
+                                </td>
+                                <td>
+                                    <a href="/experiment/1" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i> 
+                                        <span class="en-text bilingual-text">View</span>
+                                        <span class="he-text bilingual-text">צפה</span>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>
+                                        <span class="en-text bilingual-text">Attention State Classification</span>
+                                        <span class="he-text bilingual-text">סיווג מצבי קשב</span>
+                                    </strong><br>
+                                    <small class="text-muted">
+                                        <span class="en-text bilingual-text">Using multi-modal signals to detect attention levels...</span>
+                                        <span class="he-text bilingual-text">שימוש באותות רב-מודליים לזיהוי רמות קשב...</span>
+                                    </small>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="researcher-avatar me-2">M</div>
+                                        <span>
+                                            <span class="en-text bilingual-text">Dr. Michael Torres</span>
+                                            <span class="he-text bilingual-text">ד"ר מיכאל טורס</span>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="experiment-status status-completed">
+                                        <span class="en-text bilingual-text">Completed</span>
+                                        <span class="he-text bilingual-text">הושלם</span>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="en-text bilingual-text">Yesterday</span>
+                                    <span class="he-text bilingual-text">אתמול</span>
+                                </td>
+                                <td>
+                                    <a href="/experiment/2" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i> 
+                                        <span class="en-text bilingual-text">View</span>
+                                        <span class="he-text bilingual-text">צפה</span>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>
+                                        <span class="en-text bilingual-text">Neurofeedback Training Protocol</span>
+                                        <span class="he-text bilingual-text">פרוטוקול אימון נוירופידבק</span>
+                                    </strong><br>
+                                    <small class="text-muted">
+                                        <span class="en-text bilingual-text">Developing adaptive neurofeedback algorithms...</span>
+                                        <span class="he-text bilingual-text">פיתוח אלגוריתמי נוירופידבק אדפטיביים...</span>
+                                    </small>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="researcher-avatar me-2">E</div>
+                                        <span>
+                                            <span class="en-text bilingual-text">Dr. Emily Johnson</span>
+                                            <span class="he-text bilingual-text">ד"ר אמילי ג'ונסון</span>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="experiment-status status-planning">
+                                        <span class="en-text bilingual-text">Planning</span>
+                                        <span class="he-text bilingual-text">תכנון</span>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="en-text bilingual-text">3 days ago</span>
+                                    <span class="he-text bilingual-text">לפני 3 ימים</span>
+                                </td>
+                                <td>
+                                    <a href="/experiment/3" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i> 
+                                        <span class="en-text bilingual-text">View</span>
+                                        <span class="he-text bilingual-text">צפה</span>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-rocket"></i> 
+                    <span class="en-text bilingual-text">Quick Actions</span>
+                    <span class="he-text bilingual-text">פעולות מהירות</span>
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newExperimentModal">
+                        <i class="fas fa-plus"></i> 
+                        <span class="en-text bilingual-text">New Experiment</span>
+                        <span class="he-text bilingual-text">ניסוי חדש</span>
+                    </button>
+                    <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#uploadSignalModal">
+                        <i class="fas fa-upload"></i> 
+                        <span class="en-text bilingual-text">Upload Signal Data</span>
+                        <span class="he-text bilingual-text">העלה נתוני אותות</span>
+                    </button>
+                    <a href="/analysis/new" class="btn btn-outline-primary">
+                        <i class="fas fa-chart-line"></i> 
+                        <span class="en-text bilingual-text">Run Analysis</span>
+                        <span class="he-text bilingual-text">הרץ ניתוח</span>
+                    </a>
+                    <a href="/documentation/generate" class="btn btn-outline-secondary">
+                        <i class="fas fa-file-alt"></i> 
+                        <span class="en-text bilingual-text">Generate Report</span>
+                        <span class="he-text bilingual-text">צור דוח</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Signal Quality -->
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-heartbeat"></i> 
+                    <span class="en-text bilingual-text">Signal Quality Overview</span>
+                    <span class="he-text bilingual-text">סקירת איכות אותות</span>
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="signalQualityChart" height="200"></canvas>
+                <div class="mt-3">
+                    <small class="text-muted">
+                        <span class="en-text bilingual-text">Average quality across all devices (last 24h)</span>
+                        <span class="he-text bilingual-text">איכות ממוצעת בכל המכשירים (24 שעות אחרונות)</span>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+<!-- New Experiment Modal -->
+<div class="modal fade" id="newExperimentModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <span class="en-text bilingual-text">Create New Experiment</span>
+                    <span class="he-text bilingual-text">צור ניסוי חדש</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <span class="en-text bilingual-text">Experiment Name</span>
+                            <span class="he-text bilingual-text">שם הניסוי</span>
+                        </label>
+                        <input type="text" class="form-control" placeholder="e.g., Motor Imagery Classification Study">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <span class="en-text bilingual-text">Description</span>
+                            <span class="he-text bilingual-text">תיאור</span>
+                        </label>
+                        <textarea class="form-control" rows="3" placeholder="Describe the experiment objectives..."></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <span class="en-text bilingual-text">Start Date</span>
+                                    <span class="he-text bilingual-text">תאריך התחלה</span>
+                                </label>
+                                <input type="date" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <span class="en-text bilingual-text">Expected Duration</span>
+                                    <span class="he-text bilingual-text">משך צפוי</span>
+                                </label>
+                                <input type="text" class="form-control" placeholder="e.g., 2 weeks">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <span class="en-text bilingual-text">Primary Device</span>
+                            <span class="he-text bilingual-text">מכשיר ראשי</span>
+                        </label>
+                        <select class="form-select">
+                            <option>OpenBCI Cyton (8-channel)</option>
+                            <option>Muse 2 Headband</option>
+                            <option>Emotiv EPOC X</option>
+                            <option>Custom Arduino Setup</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <span class="en-text bilingual-text">Cancel</span>
+                    <span class="he-text bilingual-text">ביטול</span>
+                </button>
+                <button type="button" class="btn btn-primary">
+                    <span class="en-text bilingual-text">Create Experiment</span>
+                    <span class="he-text bilingual-text">צור ניסוי</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Upload Signal Modal -->
+<div class="modal fade" id="uploadSignalModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <span class="en-text bilingual-text">Upload Signal Data</span>
+                    <span class="he-text bilingual-text">העלאת נתוני אותות</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <span class="en-text bilingual-text">Select Experiment</span>
+                            <span class="he-text bilingual-text">בחר ניסוי</span>
+                        </label>
+                        <select class="form-select">
+                            <option>
+                                <span class="en-text bilingual-text">Motor Imagery BCI Study</span>
+                                <span class="he-text bilingual-text">מחקר BCI דמיון מוטורי</span>
+                            </option>
+                            <option>
+                                <span class="en-text bilingual-text">Attention State Classification</span>
+                                <span class="he-text bilingual-text">סיווג מצבי קשב</span>
+                            </option>
+                            <option>
+                                <span class="en-text bilingual-text">Neurofeedback Training Protocol</span>
+                                <span class="he-text bilingual-text">פרוטוקול אימון נוירופידבק</span>
+                            </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <span class="en-text bilingual-text">Signal Type</span>
+                            <span class="he-text bilingual-text">סוג אות</span>
+                        </label>
+                        <select class="form-select">
+                            <option>EEG</option>
+                            <option>EMG</option>
+                            <option>ECG</option>
+                            <option>
+                                <span class="en-text bilingual-text">Multi-modal</span>
+                                <span class="he-text bilingual-text">רב-מודלי</span>
+                            </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <span class="en-text bilingual-text">Data File</span>
+                            <span class="he-text bilingual-text">קובץ נתונים</span>
+                        </label>
+                        <input type="file" class="form-control" accept=".csv,.edf,.mat">
+                        <small class="text-muted">
+                            <span class="en-text bilingual-text">Supported formats: CSV, EDF, MAT</span>
+                            <span class="he-text bilingual-text">פורמטים נתמכים: CSV, EDF, MAT</span>
+                        </small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <span class="en-text bilingual-text">Cancel</span>
+                    <span class="he-text bilingual-text">ביטול</span>
+                </button>
+                <button type="button" class="btn btn-primary">
+                    <span class="en-text bilingual-text">Upload</span>
+                    <span class="he-text bilingual-text">העלה</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Language handling
+function setLanguage(lang) {
+    document.body.className = 'lang-' + lang;
+    document.documentElement.lang = lang;
+    localStorage.setItem('preferred-language', lang);
+    
+    // Update RTL/LTR direction
+    if (lang === 'he') {
+        document.dir = 'rtl';
+        // Update Bootstrap classes for RTL
+        document.querySelectorAll('.ms-2').forEach(el => {
+            el.classList.remove('ms-2');
+            el.classList.add('me-2');
+        });
+        document.querySelectorAll('.text-start').forEach(el => {
+            el.classList.remove('text-start');
+            el.classList.add('text-end');
+        });
+    } else {
+        document.dir = 'ltr';
+        // Update Bootstrap classes for LTR
+        document.querySelectorAll('.me-2').forEach(el => {
+            el.classList.remove('me-2');
+            el.classList.add('ms-2');
+        });
+        document.querySelectorAll('.text-end').forEach(el => {
+            el.classList.remove('text-end');
+            el.classList.add('text-start');
+        });
+    }
+}
+
+// Initialize language on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const savedLang = localStorage.getItem('preferred-language') || 'en';
+    setLanguage(savedLang);
+});
+
+// Signal Quality Chart
+const ctx = document.getElementById('signalQualityChart').getContext('2d');
+const signalQualityChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
+        datasets: [{
+            label: 'Signal Quality %',
+            data: [92, 94, 91, 95, 93, 96],
+            borderColor: 'rgb(46, 134, 171)',
+            backgroundColor: 'rgba(46, 134, 171, 0.1)',
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: false,
+                min: 80,
+                max: 100
+            }
+        },
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

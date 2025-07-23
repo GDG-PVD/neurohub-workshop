@@ -47,6 +47,7 @@ See [agents/workshop_agent/README.md](agents/workshop_agent/README.md) for detai
 3. **Agent Orchestration**: Design workflows for complex research tasks
 4. **A2A Communication**: Enable collaboration between distributed research agents
 5. **Cloud Deployment**: Deploy your multi-agent system on Google Cloud Platform
+6. **International Collaboration**: Work with bilingual interfaces supporting English and Hebrew
 
 ## Architecture Overview
 
@@ -100,6 +101,7 @@ NeuroHub transforms the original social media architecture into a neurotechnolog
 - **Database**: Spanner with SQL queries for research relationships
 - **Language Models**: Gemini 2.0 Flash
 - **Development Environment**: Google Cloud Shell (cloud-native)
+- **UI Features**: Bilingual support (English/Hebrew) with RTL layout
 
 ## Prerequisites
 

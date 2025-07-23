@@ -15,6 +15,7 @@ This index tracks all architectural decisions made for the NeuroHub project.
 | [ADR-007](007-neurohub-ally-integration.md) | NeuroHub Ally AI Assistant Integration | 2025-07-22 | Accepted | architecture, integration, workshop | Web-based AI assistant interface with A2A agent connectivity and SSE streaming |
 | [ADR-008](008-mcp-server-implementation.md) | MCP Server Implementation Without ADK Tools | 2025-07-22 | Accepted | architecture, integration, tooling | Direct MCP implementation to resolve ADK import issues |
 | [ADR-009](009-workshop-agent-pattern.md) | Pre-Built Workshop Agent Pattern | 2025-07-23 | Accepted | workshop, tooling, education | Pre-built configurable agent for rapid student onboarding |
+| [ADR-010](010-bilingual-support.md) | Bilingual Dashboard Support | 2025-07-23 | Accepted | ui, internationalization, workshop | English/Hebrew support for BGU-Brown collaboration |
 
 ## How to Use This Index
 
@@ -49,6 +50,8 @@ This index tracks all architectural decisions made for the NeuroHub project.
 - `ai-generated`: Decisions made with AI assistance
 - `security`: Security-related choices
 - `testing`: Testing approach decisions
+- `ui`: User interface decisions
+- `internationalization`: Multi-language support decisions
 
 ## Guidelines
 
