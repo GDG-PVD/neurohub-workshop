@@ -62,8 +62,22 @@ async def quick_test():
         # Collect response
         response_text = ""
         async for event in events_async:
-            if hasattr(event, 'text'):
+            # Debug: print event type
+            # print(f"[DEBUG] Event type: {type(event)}, Event: {event}")
+            
+            # Handle different event types
+            if hasattr(event, 'content') and hasattr(event.content, 'parts'):
+                # Extract text from content parts
+                for part in event.content.parts:
+                    if hasattr(part, 'text'):
+                        response_text += part.text
+            elif hasattr(event, 'text'):
                 response_text += event.text
+            elif hasattr(event, 'response'):
+                response_text += str(event.response)
+        
+        if not response_text:
+            response_text = "[Response received but format not recognized]"
         
         print(f"🤖 {AGENT_NAME}: {response_text}")
         
