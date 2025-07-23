@@ -260,6 +260,8 @@ cd tools/neurohub && python mcp_server.py
 
 We've created a pre-built agent so you can see it working immediately!
 
+**Important**: Make sure the MCP server is running in Tab 2 before proceeding!
+
 **Tab 3 - New Terminal:**
 ```bash
 # Set up environment first

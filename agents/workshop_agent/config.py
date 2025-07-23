@@ -54,11 +54,12 @@ MCP_SERVER_URL = "http://localhost:8001"
 # ADVANCED SETTINGS (optional modifications)
 # ============================================
 
+# Note: Temperature and max_tokens are not currently supported by ADK Agent class
 # Temperature for responses (0.0 = focused, 1.0 = creative)
-TEMPERATURE = 0.7
+# TEMPERATURE = 0.7
 
 # Maximum tokens in response
-MAX_TOKENS = 2048
+# MAX_TOKENS = 2048
 
 # Enable MCP tools (set to False to test without tools)
 ENABLE_TOOLS = True

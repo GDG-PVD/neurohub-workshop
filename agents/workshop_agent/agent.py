@@ -18,18 +18,13 @@ logger = logging.getLogger(__name__)
 # Try to import MCP tools - gracefully handle if not available
 try:
     if ENABLE_TOOLS:
-        from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset, SseServerParams
+        from google.adk.mcp import MCPToolset, SseServerParams
         MCP_AVAILABLE = True
     else:
         MCP_AVAILABLE = False
 except ImportError:
-    try:
-        # Try alternative import path
-        from google.adk.mcp import MCPToolset, SseServerParams
-        MCP_AVAILABLE = True
-    except ImportError:
-        logger.warning("MCP tools not available - agent will run without tools")
-        MCP_AVAILABLE = False
+    logger.warning("MCP tools not available - agent will run without tools")
+    MCP_AVAILABLE = False
 
 def create_agent_instructions():
     """Build the complete agent instructions from config."""
@@ -79,16 +74,6 @@ def get_agent():
         "description": DESCRIPTION,
         "instruction": create_agent_instructions(),
     }
-    
-    # Add model parameters if specified
-    model_params = {}
-    if TEMPERATURE is not None:
-        model_params["temperature"] = TEMPERATURE
-    if MAX_TOKENS is not None:
-        model_params["max_tokens"] = MAX_TOKENS
-    
-    if model_params:
-        agent_config["model_params"] = model_params
     
     # Add MCP tools if available
     if MCP_AVAILABLE and ENABLE_TOOLS:
