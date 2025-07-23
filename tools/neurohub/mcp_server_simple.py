@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 app = FastMCP("NeuroHub MCP Server")
 
 # Define tools using the @app.tool decorator
-@app.tool
+@app.tool()
 async def create_experiment_tool(
     name: str,
     description: str,
@@ -48,7 +48,7 @@ async def create_experiment_tool(
     )
     return json.dumps(result)
 
-@app.tool
+@app.tool()
 async def create_analysis_report_tool(
     signal_id: str,
     researcher_id: str,
@@ -68,7 +68,7 @@ async def create_analysis_report_tool(
     )
     return json.dumps(result)
 
-@app.tool
+@app.tool()
 async def create_session_log_tool(
     experiment_id: str,
     researcher_id: str,
@@ -88,7 +88,7 @@ async def create_session_log_tool(
     )
     return json.dumps(result)
 
-@app.tool
+@app.tool()
 async def export_findings_tool(
     experiment_id: str,
     output_format: str = "markdown",
@@ -102,7 +102,7 @@ async def export_findings_tool(
     )
     return json.dumps(result)
 
-@app.tool
+@app.tool()
 async def register_device_tool(
     name: str,
     device_type: str,
