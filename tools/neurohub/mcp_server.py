@@ -10,14 +10,7 @@ import logging
 from mcp.server.fastmcp import FastMCP
 from mcp import types as mcp_types
 
-# Import the NeuroHub tool functions
-from neurohub import (
-    create_experiment,
-    create_analysis_report,
-    create_session_log,
-    export_findings,
-    register_device
-)
+# NeuroHub tool functions will be imported within each tool decorator
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -26,158 +19,104 @@ logger = logging.getLogger(__name__)
 # Create the FastMCP server instance
 app = FastMCP("NeuroHub MCP Server")
 
-# Define tool schemas for each function
-tool_schemas = {
-    "create_experiment": {
-        "name": "create_experiment",
-        "description": "Create a new neurotechnology experiment with protocol details",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "experiment_name": {"type": "string", "description": "Name of the experiment"},
-                "description": {"type": "string", "description": "Detailed description"},
-                "protocol": {"type": "string", "description": "Experimental protocol"},
-                "hypothesis": {"type": "string", "description": "Research hypothesis"},
-                "principal_investigator_name": {"type": "string", "description": "PI name (must exist in system)"},
-                "start_date": {"type": "string", "description": "Start date in ISO format"},
-                "status": {"type": "string", "enum": ["planning", "active", "completed", "archived"], "default": "planning"}
-            },
-            "required": ["experiment_name", "description", "protocol", "hypothesis", "principal_investigator_name", "start_date"]
-        }
-    },
-    "create_analysis_report": {
-        "name": "create_analysis_report",
-        "description": "Document analysis findings for biosignal data",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "signal_id": {"type": "string", "description": "ID of the signal being analyzed"},
-                "researcher_name": {"type": "string", "description": "Name of the analyzing researcher"},
-                "analysis_type": {"type": "string", "description": "Type of analysis performed"},
-                "parameters": {"type": "object", "description": "Analysis parameters used"},
-                "results": {"type": "object", "description": "Quantitative results"},
-                "findings": {"type": "string", "description": "Human-readable findings"},
-                "confidence_score": {"type": "number", "minimum": 0, "maximum": 1, "description": "Confidence score (0-1)"}
-            },
-            "required": ["signal_id", "researcher_name", "analysis_type", "parameters", "results", "findings", "confidence_score"]
-        }
-    },
-    "create_session_log": {
-        "name": "create_session_log",
-        "description": "Log an experimental session with recorded signals",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "experiment_id": {"type": "string", "description": "ID of the experiment"},
-                "researcher_name": {"type": "string", "description": "Name of the researcher"},
-                "participant_id": {"type": "string", "description": "Anonymous participant ID"},
-                "session_date": {"type": "string", "description": "Session date in ISO format"},
-                "duration_minutes": {"type": "integer", "description": "Session duration in minutes"},
-                "notes": {"type": "string", "description": "Session notes"},
-                "signals_recorded": {
-                    "type": "array",
-                    "description": "List of recorded signals",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "device_name": {"type": "string"},
-                            "signal_type": {"type": "string"},
-                            "duration_seconds": {"type": "number"},
-                            "quality_score": {"type": "number"}
-                        }
-                    }
-                }
-            },
-            "required": ["experiment_id", "researcher_name", "participant_id", "session_date", "duration_minutes", "notes", "signals_recorded"]
-        }
-    },
-    "export_findings": {
-        "name": "export_findings",
-        "description": "Export experiment findings in publication-ready format",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "experiment_id": {"type": "string", "description": "ID of the experiment"},
-                "format": {"type": "string", "enum": ["markdown", "latex", "json"], "default": "markdown"},
-                "include_raw_data": {"type": "boolean", "default": False}
-            },
-            "required": ["experiment_id"]
-        }
-    },
-    "register_device": {
-        "name": "register_device",
-        "description": "Register a new neurotechnology device in the system",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "device_name": {"type": "string", "description": "Friendly name for the device"},
-                "device_type": {"type": "string", "description": "Type (EEG, EMG, ECG, etc.)"},
-                "manufacturer": {"type": "string", "description": "Device manufacturer"},
-                "model": {"type": "string", "description": "Device model"},
-                "sampling_rate": {"type": "integer", "description": "Sampling rate in Hz"},
-                "channels": {"type": "integer", "description": "Number of channels"},
-                "specifications": {"type": "object", "description": "Additional specifications"}
-            },
-            "required": ["device_name", "device_type", "manufacturer", "model", "sampling_rate", "channels"]
-        }
-    }
-}
 
-# Store available tool functions
-tool_functions = {
-    "create_experiment": create_experiment,
-    "create_analysis_report": create_analysis_report,
-    "create_session_log": create_session_log,
-    "export_findings": export_findings,
-    "register_device": register_device
-}
+# Define tools using the @app.tool decorator
+@app.tool()
+async def create_experiment(
+    name: str,
+    description: str,
+    principal_investigator: str,
+    hypothesis: str,
+    start_date: str,
+    protocol: dict = None,
+    equipment_ids: list = None
+) -> str:
+    """Create a new neurotechnology experiment in the database."""
+    from neurohub import create_experiment as create_exp_func
+    result = create_exp_func(
+        name=name,
+        description=description,
+        principal_investigator=principal_investigator,
+        hypothesis=hypothesis,
+        start_date=start_date,
+        protocol=protocol,
+        equipment_ids=equipment_ids
+    )
+    return json.dumps(result)
 
-@app.list_tools()
-async def list_tools() -> list[mcp_types.Tool]:
-    """MCP handler to list available NeuroHub tools."""
-    mcp_tools = []
-    for tool_name, schema in tool_schemas.items():
-        mcp_tool = mcp_types.Tool(
-            name=schema["name"],
-            description=schema["description"],
-            inputSchema=schema["inputSchema"]
-        )
-        mcp_tools.append(mcp_tool)
-        logger.info(f"MCP Server: Advertising tool: {tool_name}")
-    return mcp_tools
+@app.tool()
+async def create_analysis_report(
+    signal_id: str,
+    researcher_id: str,
+    analysis_type: str,
+    findings: str,
+    confidence_score: float = None,
+    methodology: dict = None
+) -> str:
+    """Create an analysis report for signal data."""
+    from neurohub import create_analysis_report as create_report_func
+    result = create_report_func(
+        signal_id=signal_id,
+        researcher_id=researcher_id,
+        analysis_type=analysis_type,
+        findings=findings,
+        confidence_score=confidence_score,
+        methodology=methodology
+    )
+    return json.dumps(result)
 
-@app.call_tool()
-async def call_tool(
-    name: str, 
-    arguments: dict
-) -> list[mcp_types.TextContent | mcp_types.ImageContent | mcp_types.EmbeddedResource]:
-    """MCP handler to execute a tool call."""
-    logger.info(f"MCP Server: Received call_tool request for '{name}' with args: {arguments}")
-    
-    # Look up the tool function by name
-    tool_function = tool_functions.get(name)
-    if tool_function:
-        try:
-            # Execute the tool function
-            result = tool_function(**arguments)
-            logger.info(f"MCP Server: Tool '{name}' executed successfully.")
-            
-            # Convert response to JSON string
-            if result is not None:
-                response_text = json.dumps(result, indent=2)
-            else:
-                response_text = json.dumps({"status": "completed", "message": f"Tool '{name}' executed successfully"})
-            
-            return [mcp_types.TextContent(type="text", text=response_text)]
-            
-        except Exception as e:
-            logger.error(f"MCP Server: Error executing tool '{name}': {e}")
-            error_text = json.dumps({"error": f"Failed to execute tool '{name}': {str(e)}"})
-            return [mcp_types.TextContent(type="text", text=error_text)]
-    else:
-        logger.error(f"MCP Server: Tool '{name}' not found.")
-        error_text = json.dumps({"error": f"Tool '{name}' not implemented."})
-        return [mcp_types.TextContent(type="text", text=error_text)]
+@app.tool()
+async def create_session_log(
+    experiment_id: str,
+    researcher_id: str,
+    duration_minutes: int,
+    notes: str = None,
+    participants: int = None,
+    environmental_conditions: dict = None
+) -> str:
+    """Create a session log for an experimental session."""
+    from neurohub import create_session_log as create_log_func
+    result = create_log_func(
+        experiment_id=experiment_id,
+        researcher_id=researcher_id,
+        duration_minutes=duration_minutes,
+        notes=notes,
+        participants=participants,
+        environmental_conditions=environmental_conditions
+    )
+    return json.dumps(result)
+
+@app.tool()
+async def export_findings(
+    experiment_id: str,
+    output_format: str = "markdown",
+    include_raw_data: bool = False
+) -> str:
+    """Export research findings in publication format."""
+    from neurohub import export_findings as export_func
+    result = export_func(
+        experiment_id=experiment_id,
+        output_format=output_format,
+        include_raw_data=include_raw_data
+    )
+    return json.dumps(result)
+
+@app.tool()
+async def register_device(
+    name: str,
+    device_type: str,
+    manufacturer: str,
+    specifications: dict
+) -> str:
+    """Register a new research device/equipment."""
+    from neurohub import register_device as register_func
+    result = register_func(
+        name=name,
+        device_type=device_type,
+        manufacturer=manufacturer,
+        specifications=specifications
+    )
+    return json.dumps(result)
 
 # Entry point for the MCP server
 if __name__ == "__main__":
@@ -188,11 +127,11 @@ if __name__ == "__main__":
     port = int(os.environ.get("MCP_PORT", "8001"))
     
     logger.info(f"Starting NeuroHub MCP Server on {host}:{port}")
-    logger.info(f"Available tools: {list(tool_functions.keys())}")
+    logger.info("Tools will be automatically discovered by FastMCP")
     
     # Run the server
     uvicorn.run(
-        app.get_asgi_app(),
+        app,
         host=host,
         port=port,
         log_level="info"
