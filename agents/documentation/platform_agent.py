@@ -7,4 +7,4 @@ from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
 from common.task_manager import AgentWithTaskManager
-from platform_mcp_client import agent
+from agent import root_agent as agent

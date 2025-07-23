@@ -388,16 +388,19 @@ Google's Agent Development Kit (ADK) provides different types of agents for vari
 
 With the workshop agent working, you now understand the basics!
 
-### Part 8: Using A2A for Network Communication
+### Part 8: Preview of A2A (Optional)
 
-The documentation agent includes an A2A server wrapper:
+A2A (Agent-to-Agent) protocol allows agents to communicate with each other. We'll cover this in detail in Module 5.
 
+To see an example A2A server:
 ```bash
 cd ~/neurohub-workshop/agents/documentation
 python a2a_server.py
 ```
 
-This exposes your agent on port 10002 for the web app to discover!
+This starts the documentation agent on port 10002, making it discoverable by other services.
+
+**Note**: The workshop agent has a placeholder A2A server (`a2a_server.py`) that you can explore, but it's not required for Module 2.
 
 ### Troubleshooting Common Issues
 

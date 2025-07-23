@@ -1,7 +1,7 @@
 from common.server import A2AServer
 from common.types import AgentCard, AgentCapabilities, AgentSkill
 from common.task_manager import AgentTaskManager
-from platform_mcp_client.platform_agent import PlatformAgent
+from platform_agent import PlatformAgent
 
 import os
 import logging
