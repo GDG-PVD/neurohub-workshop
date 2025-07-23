@@ -63,7 +63,7 @@ def home():
     # - Active researchers
     # - Recent analyses
     # - Signal data stats
-    return render_template('index.html')
+    return render_template('index_bilingual.html')
 
 @app.route('/experiments')
 def experiments():
