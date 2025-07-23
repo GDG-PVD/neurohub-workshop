@@ -1,18 +1,33 @@
 import os
 import logging
 from google.adk.agents import Agent
-from google.adk.mcp import MCPToolset, SseServerParams
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Try to import MCP tools - gracefully handle if not available
+try:
+    from google.adk.mcp import MCPToolset, SseServerParams
+    MCP_AVAILABLE = True
+except ImportError:
+    logger.warning("MCP tools not available - agent will run without database tools")
+    MCP_AVAILABLE = False
+
 # Get MCP server URL from environment
 MCP_SERVER_URL = os.environ.get("MCP_SERVER_URL", "http://localhost:8001/sse")
 
-# Fetch tools from the NeuroHub MCP Server
-tools = MCPToolset(
-    connection_params=SseServerParams(url=MCP_SERVER_URL, headers={})
-)
+# Try to fetch tools from the NeuroHub MCP Server
+tools = []
+if MCP_AVAILABLE:
+    try:
+        mcp_toolset = MCPToolset(
+            connection_params=SseServerParams(url=MCP_SERVER_URL, headers={})
+        )
+        tools = [mcp_toolset]
+        logger.info("MCP tools connected successfully")
+    except Exception as e:
+        logger.warning(f"Could not connect to MCP server: {e}")
+        logger.info("Agent will run without database tools")
 
 root_agent = Agent(
     name="documentation_agent",
@@ -61,5 +76,12 @@ root_agent = Agent(
         - Document the analysis methodology used
         """
     ),
-    tools=[tools],
+    tools=tools,
 )
+
+# For compatibility with test client
+async def get_agent_async():
+    """Return the agent and an exit stack for async context management."""
+    import contextlib
+    exit_stack = contextlib.AsyncExitStack()
+    return root_agent, exit_stack

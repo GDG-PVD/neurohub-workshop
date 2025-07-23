@@ -158,6 +158,9 @@ source .venv/bin/activate
 
 # Install dependencies (30-60 seconds with UV!)
 uv pip install -r requirements.txt
+
+# Install A2A common module (needed for agent communication)
+uv pip install agents/a2a_common-0.1.0-py3-none-any.whl
 ```
 
 ### Step 10: Load Sample Data
@@ -388,19 +391,21 @@ Google's Agent Development Kit (ADK) provides different types of agents for vari
 
 With the workshop agent working, you now understand the basics!
 
-### Part 8: Preview of A2A (Optional)
+### What's Next?
 
-A2A (Agent-to-Agent) protocol allows agents to communicate with each other. We'll cover this in detail in Module 5.
+Congratulations! You've successfully:
+- ✅ Created and configured your own AI agent
+- ✅ Tested it with various prompts
+- ✅ Customized its personality and expertise
 
-To see an example A2A server:
-```bash
-cd ~/neurohub-workshop/agents/documentation
-python a2a_server.py
-```
+In **Module 3**, you'll connect your agent to the MCP server to enable database operations like creating experiments and saving analysis results.
 
-This starts the documentation agent on port 10002, making it discoverable by other services.
+### Optional: Preview of Advanced Features
 
-**Note**: The workshop agent has a placeholder A2A server (`a2a_server.py`) that you can explore, but it's not required for Module 2.
+**A2A Protocol (covered in Module 5):**
+The A2A (Agent-to-Agent) protocol allows agents to communicate with each other. Each agent directory has example A2A servers, but these require the MCP module which may not be available in all environments.
+
+**Note**: If you see "MCP tools not available" warnings, this is expected. The core agent functionality works without MCP, and you can still proceed with the workshop.
 
 ### Troubleshooting Common Issues
 
