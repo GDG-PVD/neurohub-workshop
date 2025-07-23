@@ -132,7 +132,7 @@ tool_functions = {
     "register_device": register_device
 }
 
-@app.list_tools()
+@app.list_tools
 async def list_tools() -> list[mcp_types.Tool]:
     """MCP handler to list available NeuroHub tools."""
     mcp_tools = []
@@ -146,7 +146,7 @@ async def list_tools() -> list[mcp_types.Tool]:
         logger.info(f"MCP Server: Advertising tool: {tool_name}")
     return mcp_tools
 
-@app.call_tool()
+@app.call_tool
 async def call_tool(
     name: str, 
     arguments: dict
