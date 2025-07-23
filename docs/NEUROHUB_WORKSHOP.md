@@ -158,9 +158,6 @@ source .venv/bin/activate
 
 # Install dependencies (30-60 seconds with UV!)
 uv pip install -r requirements.txt
-
-# Install A2A common module (needed for agent communication)
-uv pip install agents/a2a_common-0.1.0-py3-none-any.whl
 ```
 
 ### Step 10: Load Sample Data
@@ -230,11 +227,7 @@ cd tools/neurohub && python mcp_server.py
 
 1. Click **NeuroHub Ally** in the navigation
 2. Try this prompt: "What experiments are studying motor control?"
-3. You'll see one of two things:
-   - **Mock response** (if no agents are running) - This is expected for now!
-   - **"No AI agents available"** error - This means it's trying to connect to A2A agents
-
-**Note**: The NeuroHub Ally connects to A2A agent servers (covered in Module 5). For now, it shows mock responses, which is perfect for understanding the application structure.
+3. Notice: It can't help yet - we need to build agents!
 
 ### Understand the Architecture
 
@@ -395,21 +388,19 @@ Google's Agent Development Kit (ADK) provides different types of agents for vari
 
 With the workshop agent working, you now understand the basics!
 
-### What's Next?
+### Part 8: Preview of A2A (Optional)
 
-Congratulations! You've successfully:
-- ✅ Created and configured your own AI agent
-- ✅ Tested it with various prompts
-- ✅ Customized its personality and expertise
+A2A (Agent-to-Agent) protocol allows agents to communicate with each other. We'll cover this in detail in Module 5.
 
-In **Module 3**, you'll connect your agent to the MCP server to enable database operations like creating experiments and saving analysis results.
+To see an example A2A server:
+```bash
+cd ~/neurohub-workshop/agents/documentation
+python a2a_server.py
+```
 
-### Optional: Preview of Advanced Features
+This starts the documentation agent on port 10002, making it discoverable by other services.
 
-**A2A Protocol (covered in Module 5):**
-The A2A (Agent-to-Agent) protocol allows agents to communicate with each other. Each agent directory has example A2A servers, but these require the MCP module which may not be available in all environments.
-
-**Note**: If you see "MCP tools not available" warnings, this is expected. The core agent functionality works without MCP, and you can still proceed with the workshop.
+**Note**: The workshop agent has a placeholder A2A server (`a2a_server.py`) that you can explore, but it's not required for Module 2.
 
 ### Troubleshooting Common Issues
 
