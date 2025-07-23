@@ -4,13 +4,6 @@
 
 {% block extra_css %}
 <style>
-    .lang-toggle {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        z-index: 1000;
-    }
-    
     [lang="he"] {
         direction: rtl;
         text-align: right;
@@ -45,24 +38,25 @@
 {% endblock %}
 
 {% block content %}
-<!-- Language Toggle -->
-<div class="lang-toggle">
-    <div class="btn-group" role="group">
-        <button type="button" class="btn btn-sm btn-outline-primary" onclick="setLanguage('en')">EN</button>
-        <button type="button" class="btn btn-sm btn-outline-primary" onclick="setLanguage('he')">עב</button>
-    </div>
-</div>
-
 <div class="row mb-4">
     <div class="col">
-        <h1 class="display-5">
-            <span class="en-text bilingual-text">Research Dashboard</span>
-            <span class="he-text bilingual-text">לוח בקרת מחקר</span>
-        </h1>
-        <p class="lead">
-            <span class="en-text bilingual-text">Welcome to NeuroHub - Your Neurotechnology Research Platform</span>
-            <span class="he-text bilingual-text">ברוכים הבאים ל-NeuroHub - פלטפורמת המחקר הנוירוטכנולוגית שלכם</span>
-        </p>
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h1 class="display-5">
+                    <span class="en-text bilingual-text">Research Dashboard</span>
+                    <span class="he-text bilingual-text">לוח בקרת מחקר</span>
+                </h1>
+                <p class="lead">
+                    <span class="en-text bilingual-text">Welcome to NeuroHub - Your Neurotechnology Research Platform</span>
+                    <span class="he-text bilingual-text">ברוכים הבאים ל-NeuroHub - פלטפורמת המחקר הנוירוטכנולוגית שלכם</span>
+                </p>
+            </div>
+            <!-- Language Toggle -->
+            <div class="btn-group" role="group" aria-label="Language selection">
+                <button type="button" class="btn btn-outline-primary active" onclick="setLanguage('en')">EN</button>
+                <button type="button" class="btn btn-outline-primary" onclick="setLanguage('he')">עב</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -537,6 +531,12 @@ function setLanguage(lang) {
     document.documentElement.lang = lang;
     localStorage.setItem('preferred-language', lang);
     
+    // Update button states
+    document.querySelectorAll('.btn-group button').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
     // Update RTL/LTR direction
     if (lang === 'he') {
         document.dir = 'rtl';
@@ -566,7 +566,20 @@ function setLanguage(lang) {
 // Initialize language on page load
 document.addEventListener('DOMContentLoaded', function() {
     const savedLang = localStorage.getItem('preferred-language') || 'en';
-    setLanguage(savedLang);
+    // Set language without event context
+    document.body.className = 'lang-' + savedLang;
+    document.documentElement.lang = savedLang;
+    document.dir = savedLang === 'he' ? 'rtl' : 'ltr';
+    
+    // Set active button
+    document.querySelectorAll('.btn-group button').forEach(btn => {
+        if ((savedLang === 'en' && btn.textContent === 'EN') || 
+            (savedLang === 'he' && btn.textContent === 'עב')) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
 });
 
 // Signal Quality Chart
