@@ -46,6 +46,11 @@
 - [x] Fixed import issues with proper logging
 - [x] Created ADR-009 documenting the pattern
 - [x] Updated README with workshop agent info
+- [x] Fixed ADK Runner initialization issues
+- [x] Created troubleshooting guide
+- [x] Added simple diagnostic test script
+- [x] Fixed documentation agent imports
+- [x] Created NeuroHub Ally architecture documentation
 
 ### ✅ Completed: Cloud-Native Migration and SQL Implementation
 
