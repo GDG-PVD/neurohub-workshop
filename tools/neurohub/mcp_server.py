@@ -132,19 +132,15 @@ tool_functions = {
     "register_device": register_device
 }
 
-@app.list_tools
-async def list_tools() -> list[mcp_types.Tool]:
-    """MCP handler to list available NeuroHub tools."""
-    mcp_tools = []
-    for tool_name, schema in tool_schemas.items():
-        mcp_tool = mcp_types.Tool(
-            name=schema["name"],
-            description=schema["description"],
-            inputSchema=schema["inputSchema"]
-        )
-        mcp_tools.append(mcp_tool)
-        logger.info(f"MCP Server: Advertising tool: {tool_name}")
-    return mcp_tools
+# Override the list_tools method
+app.list_tools = lambda: [
+    mcp_types.Tool(
+        name=schema["name"],
+        description=schema["description"],
+        inputSchema=schema["inputSchema"]
+    )
+    for schema in tool_schemas.values()
+]
 
 @app.call_tool
 async def call_tool(
