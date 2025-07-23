@@ -14,6 +14,7 @@ This registry tracks all architectural and technical decisions for the NeuroHub 
 | SQL queries over Property Graph | 2025-07-18 | High | ✅ Accepted | [ADR-005](docs/adr/ADR-005-sql-queries-over-graph.md) |
 | NeuroHub Ally AI Assistant | 2025-07-22 | High | ✅ Accepted | [ADR-007](docs/adr/007-neurohub-ally-integration.md) |
 | MCP Server native implementation | 2025-07-22 | High | ✅ Accepted | [ADR-008](docs/adr/008-mcp-server-implementation.md) |
+| Pre-built workshop agent pattern | 2025-07-23 | High | ✅ Accepted | [ADR-009](docs/adr/009-workshop-agent-pattern.md) |
 
 ### 🛠️ Technology Choices
 
@@ -76,4 +77,4 @@ This registry tracks all architectural and technical decisions for the NeuroHub 
 - Annual review of all high-impact decisions
 - Continuous updates as new decisions are made
 
-Last updated: 2025-07-22
+Last updated: 2025-07-23

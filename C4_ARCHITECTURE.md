@@ -233,11 +233,23 @@ response = await a2a_client.send_task(
 - **Database Queries**: <50ms for SQL queries with indexes
 - **MCP Tools**: <100ms overhead
 
+## Workshop Support
+
+### Pre-Built Workshop Agent
+For rapid workshop onboarding, we provide a pre-built agent in `agents/workshop_agent/` that:
+- Works immediately without complex setup
+- Configurable via simple `config.py` file  
+- Gracefully handles missing MCP dependencies
+- Includes interactive test scripts
+
+See [ADR-009: Workshop Agent Pattern](docs/adr/009-workshop-agent-pattern.md) for details.
+
 ## Related Documentation
 
 - [ADR-003: MCP for Agent Communication](docs/adr/ADR-003-mcp-over-direct-api.md)
 - [ADR-005: SQL Queries Over Property Graph](docs/adr/ADR-005-sql-queries-over-graph.md)
 - [ADR-007: NeuroHub Ally Integration](docs/adr/007-neurohub-ally-integration.md)
 - [ADR-008: MCP Server Implementation](docs/adr/008-mcp-server-implementation.md)
+- [ADR-009: Workshop Agent Pattern](docs/adr/009-workshop-agent-pattern.md)
 - [Cloud Shell Guide](docs/CLOUD_SHELL_GUIDE.md)
 - [Agent Development Guide](docs/AI_DEVELOPMENT_GUIDE.md)

@@ -251,69 +251,184 @@ cd tools/neurohub && python mcp_server.py
 
 ---
 
-## Module 2: Your First AI Agent
+## Module 2: Your First AI Agent - Up and Running in 5 Minutes!
 
 **Duration**: 30 minutes  
-**Goal**: Build a documentation agent using Google ADK
+**Goal**: Get a working AI agent running quickly, then customize it
 
-### Understanding ADK Concepts
+### Part 1: Run the Pre-Built Workshop Agent (5 minutes)
 
-Google ADK provides powerful agent building blocks:
-- **Agent**: Base class with LLM reasoning and tool use
-- **MCPToolset**: Connects agents to MCP servers
-- **Runner**: Executes agents with session management
-
-### Build the Documentation Agent
+We've created a pre-built agent so you can see it working immediately!
 
 **Tab 3 - New Terminal:**
 ```bash
+# Navigate to the workshop agent
+cd ~/neurohub-workshop/agents/workshop_agent
+
+# Run the quick test
+python quick_test.py
+```
+
+You should see:
+- Your agent introducing itself
+- A successful response to a question
+- Confirmation that everything is working!
+
+### Part 2: Have a Conversation (5 minutes)
+
+Try the interactive mode:
+```bash
+python interactive_test.py
+```
+
+Ask questions like:
+- "What equipment do I need for an EEG experiment?"
+- "How do I analyze EMG signals?"
+- "What's the best way to filter noise from biosignals?"
+
+Type 'quit' to exit.
+
+### Part 3: Customize Your Agent (10 minutes)
+
+Now let's make the agent yours! Open the configuration file:
+
+```bash
+nano config.py
+```
+
+#### Things to Customize:
+
+1. **Change the Personality** (find the PERSONALITY variable):
+   ```python
+   PERSONALITY = """
+   You are an enthusiastic neuroscience PhD student who gets excited about brain-computer interfaces.
+   You love using analogies to explain complex concepts.
+   """
+   ```
+
+2. **Update Focus Areas** (find FOCUS_AREAS):
+   ```python
+   FOCUS_AREAS = [
+       "Brain-Computer Interfaces",
+       "Neural prosthetics", 
+       "EEG-based communication",
+       "Motor imagery classification"
+   ]
+   ```
+
+3. **Add Custom Instructions** (find CUSTOM_INSTRUCTIONS):
+   ```python
+   CUSTOM_INSTRUCTIONS = """
+   - Always suggest creative applications for BCIs
+   - Mention relevant recent research papers when possible
+   - Be encouraging about the future of neurotechnology
+   """
+   ```
+
+Save with Ctrl+X, Y, Enter.
+
+### Part 4: Test Your Customized Agent (5 minutes)
+
+Run the quick test again to see your changes:
+```bash
+python quick_test.py
+```
+
+Notice how the personality and responses have changed!
+
+### Part 5: Understanding How It Works (10 minutes)
+
+Let's look at the key components:
+
+```bash
+# View the agent code (no need to modify)
+cat agent.py | head -50
+```
+
+Key concepts:
+- **Agent Class**: The base building block from Google ADK
+- **Instructions**: Tell the agent how to behave
+- **Model**: We use "gemini-2.0-flash" for fast responses
+- **Tools**: Can connect to MCP server (we'll do this in Module 3)
+
+### Part 6: Understanding ADK Concepts
+
+Google's Agent Development Kit (ADK) provides different types of agents for various use cases:
+
+#### Core ADK Classes
+
+1. **BaseAgent**: Foundation class for all agents
+   - Provides basic agent functionality
+   - No built-in LLM capabilities
+   - Used for simple, deterministic agents
+
+2. **Agent**: Standard ADK agent with LLM
+   - Built on BaseAgent
+   - Includes LLM integration (Gemini models)
+   - Can use tools via MCP
+   - Single-turn conversations
+
+3. **LlmAgent**: Advanced LLM agent
+   - Multi-turn conversations
+   - Memory management
+   - Complex reasoning capabilities
+
+4. **LoopAgent**: Iterative processing agent
+   - Handles workflows with loops
+   - Can retry and refine outputs
+   - Good for complex analysis
+
+With the workshop agent working, you now understand the basics!
+
+### Part 8: Using A2A for Network Communication
+
+The documentation agent includes an A2A server wrapper:
+
+```bash
 cd ~/neurohub-workshop/agents/documentation
-```
-
-Look at the agent structure:
-```python
-# agent.py - Core agent logic using Google ADK
-root_agent = Agent(
-    name="documentation_agent",
-    model="gemini-2.0-flash",
-    description="Agent responsible for creating research documentation...",
-    instruction="You are a specialized documentation agent..."
-)
-```
-
-### Test Your Agent Locally
-
-```bash
-# Run the test client
-python neurohub_test_client.py
-```
-
-Try these prompts:
-1. "Generate a report for the Motor Imagery BCI experiment"
-2. "Summarize findings from EMG analysis"
-
-### Wrap with A2A Protocol
-
-The agent is already wrapped for network communication in `a2a_server.py`:
-- Exposes the agent on port 10002
-- Provides agent discovery endpoint
-- Handles task execution requests
-
-### Start the Agent Server
-
-```bash
 python a2a_server.py
 ```
 
-Your agent is now running on port 10002!
+This exposes your agent on port 10002 for the web app to discover!
 
-### Connect to NeuroHub Ally
+### Troubleshooting Common Issues
 
-The web app automatically discovers A2A agents. Refresh the page and try NeuroHub Ally again - it should now be able to generate documentation!
+**Can't find config.py or agent.py?**
+- Make sure you're in the right directory: `cd ~/neurohub-workshop/agents/workshop_agent`
+- List files: `ls -la`
 
-> **🚧 Troubleshooting**:
-> - "Module not found": `uv pip install agents/a2a_common-0.1.0-py3-none-any.whl`
-> - "Port already in use": Change port in a2a_server.py
+**Import errors?**
+- Activate virtual environment: `source ~/neurohub-workshop/.venv/bin/activate`
+- Re-install dependencies: `uv pip install -r requirements.txt`
+
+**Authentication errors?**
+- Re-source environment: `source ~/neurohub-workshop/set_env.sh`
+- Check project: `echo $GOOGLE_CLOUD_PROJECT`
+
+**MCP connection issues?**
+- This is fine for Module 2! The agent works without tools
+- We'll connect to MCP in Module 3
+
+### Key Takeaways
+
+1. **Agents are configurable**: Change personality, focus areas, and behavior
+2. **Quick iteration**: Modify config.py and test immediately
+3. **ADK basics**: Agent class, instructions, model selection
+4. **Testing patterns**: Use Runner with session management
+
+### Try This Before Moving On
+
+1. Give your agent a unique personality (e.g., "excited grad student", "wise professor")
+2. Add a new focus area you're interested in
+3. Ask it a complex question about neurotechnology
+4. Compare responses before and after your changes
+
+### Next: Connect to Tools!
+
+In Module 3, you'll:
+- Connect your agent to the MCP server
+- Enable it to create experiments and save data
+- See your agent interact with the database
 
 ---
 

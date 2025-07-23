@@ -14,6 +14,7 @@ This index tracks all architectural decisions made for the NeuroHub project.
 | [ADR-006](ADR-006-codelab-documentation.md) | Codelab-Style Documentation | 2025-07-18 | Accepted | documentation, workshop | Follow InstaVibe's 13-section structure adapted for neurotechnology |
 | [ADR-007](007-neurohub-ally-integration.md) | NeuroHub Ally AI Assistant Integration | 2025-07-22 | Accepted | architecture, integration, workshop | Web-based AI assistant interface with A2A agent connectivity and SSE streaming |
 | [ADR-008](008-mcp-server-implementation.md) | MCP Server Implementation Without ADK Tools | 2025-07-22 | Accepted | architecture, integration, tooling | Direct MCP implementation to resolve ADK import issues |
+| [ADR-009](009-workshop-agent-pattern.md) | Pre-Built Workshop Agent Pattern | 2025-07-23 | Accepted | workshop, tooling, education | Pre-built configurable agent for rapid student onboarding |
 
 ## How to Use This Index
 
@@ -44,6 +45,7 @@ This index tracks all architectural decisions made for the NeuroHub project.
 - `performance`: Performance-related decisions
 - `cost`: Cost optimization decisions
 - `workshop`: Workshop-specific decisions
+- `education`: Educational and teaching decisions
 - `ai-generated`: Decisions made with AI assistance
 - `security`: Security-related choices
 - `testing`: Testing approach decisions

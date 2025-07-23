@@ -22,6 +22,24 @@ This workshop was created for the **BGU-Brown Summer School: Embodied Brain Tech
 
 **📚 Workshop Participants**: Start with [**docs/NEUROHUB_WORKSHOP.md**](docs/NEUROHUB_WORKSHOP.md) - our comprehensive guide that includes setup, all modules, troubleshooting, and teardown instructions.
 
+### New: Pre-Built Workshop Agent
+
+We've created a pre-built agent to help workshop participants get started quickly:
+
+```bash
+cd agents/workshop_agent
+python quick_test.py  # See it working in <1 minute!
+```
+
+The workshop agent features:
+- Immediate functionality without complex setup
+- Simple configuration via `config.py`
+- Customizable personality and expertise areas
+- Interactive chat interface
+- Graceful handling of missing dependencies
+
+See [agents/workshop_agent/README.md](agents/workshop_agent/README.md) for details.
+
 ## What You'll Learn
 
 1. **Foundations with Google's ADK**: Build intelligent agents for biosignal analysis and experiment design
