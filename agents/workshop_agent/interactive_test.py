@@ -23,7 +23,7 @@ async def interactive_test():
     artifact_service = InMemoryArtifactService()
     
     # Create session
-    session = await session_service.create_session(
+    session = session_service.create_session(
         app_name="workshop_agent_interactive",
         user_id="interactive_user"
     )
@@ -55,7 +55,7 @@ async def interactive_test():
         
         try:
             result = await runner.run(
-                session_id=session.session_id,
+                session_id=session.id,
                 prompt=prompt
             )
             
