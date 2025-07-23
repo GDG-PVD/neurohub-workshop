@@ -28,7 +28,10 @@ async def quick_test():
     artifact_service = InMemoryArtifactService()
     
     # Create session
-    session = await session_service.create_session()
+    session = await session_service.create_session(
+        app_name="workshop_agent_test",
+        user_id="test_user"
+    )
     
     # Create runner
     runner = Runner(
