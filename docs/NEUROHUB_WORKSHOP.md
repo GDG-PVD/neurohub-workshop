@@ -260,17 +260,10 @@ cd tools/neurohub && python mcp_server.py
 
 We've created a pre-built agent so you can see it working immediately!
 
-**Important**: Make sure the MCP server is running in Tab 2 before proceeding!
-
 **Tab 3 - New Terminal:**
 ```bash
-# Set up environment first
-cd ~/neurohub-workshop
-source set_env.sh
-source .venv/bin/activate
-
 # Navigate to the workshop agent
-cd agents/workshop_agent
+cd ~/neurohub-workshop/agents/workshop_agent
 
 # Run the quick test
 python quick_test.py
@@ -285,7 +278,6 @@ You should see:
 
 Try the interactive mode:
 ```bash
-# Make sure you're still in the workshop_agent directory with virtual env active
 python interactive_test.py
 ```
 
@@ -388,19 +380,16 @@ Google's Agent Development Kit (ADK) provides different types of agents for vari
 
 With the workshop agent working, you now understand the basics!
 
-### Part 8: Preview of A2A (Optional)
+### Part 8: Using A2A for Network Communication
 
-A2A (Agent-to-Agent) protocol allows agents to communicate with each other. We'll cover this in detail in Module 5.
+The documentation agent includes an A2A server wrapper:
 
-To see an example A2A server:
 ```bash
 cd ~/neurohub-workshop/agents/documentation
 python a2a_server.py
 ```
 
-This starts the documentation agent on port 10002, making it discoverable by other services.
-
-**Note**: The workshop agent has a placeholder A2A server (`a2a_server.py`) that you can explore, but it's not required for Module 2.
+This exposes your agent on port 10002 for the web app to discover!
 
 ### Troubleshooting Common Issues
 
@@ -408,15 +397,9 @@ This starts the documentation agent on port 10002, making it discoverable by oth
 - Make sure you're in the right directory: `cd ~/neurohub-workshop/agents/workshop_agent`
 - List files: `ls -la`
 
-**Import errors (ModuleNotFoundError: No module named 'google.adk')?**
-- You forgot to activate the virtual environment!
-- Run these commands first:
-  ```bash
-  cd ~/neurohub-workshop
-  source set_env.sh
-  source .venv/bin/activate
-  ```
-- Then navigate back: `cd agents/workshop_agent`
+**Import errors?**
+- Activate virtual environment: `source ~/neurohub-workshop/.venv/bin/activate`
+- Re-install dependencies: `uv pip install -r requirements.txt`
 
 **Authentication errors?**
 - Re-source environment: `source ~/neurohub-workshop/set_env.sh`
