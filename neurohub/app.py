@@ -20,6 +20,11 @@ from db_neurohub import (
     get_researcher_collaborations,
     get_signal_data_by_experiment
 )
+try:
+    from db_neurohub_enhanced import get_all_researchers_with_stats
+except ImportError:
+    # Fallback if enhanced version not available
+    get_all_researchers_with_stats = get_all_researchers
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "a_default_secret_key_for_dev") 
@@ -105,7 +110,8 @@ def researchers():
         return render_template('researchers.html', researchers=[])
     
     try:
-        researchers_list = get_all_researchers(db, limit=100)
+        # Try enhanced version first for better stats
+        researchers_list = get_all_researchers_with_stats(db, limit=100)
         return render_template('researchers.html', researchers=researchers_list or [])
     except Exception as e:
         flash(f"Failed to load researchers: {e}", "danger")
